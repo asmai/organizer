@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<expense_categories>
+    <category Nb="1" Na="Other income" >
+        <sub_category Nbc="1" Nb="1" Na="Unemployment benefit" />
+		<sub_category Nbc="1" Nb="2" Na="Family allowance" />
+		<sub_category Nbc="1" Nb="3" Na="Tax credit" />
+		<sub_category Nbc="1" Nb="4" Na="Gambling" />
+		<sub_category Nbc="1" Nb="5" Na="Mutual insurance" />
+		<sub_category Nbc="1" Nb="6" Na="Social security" />
+    </category>
+    <category Nb="2" Na="Retirement" >
+        <sub_category Nbc="2" Nb="1" Na="Retirement Fund" />
+		<sub_category Nbc="2" Nb="2" Na="Pension" />
+		<sub_category Nbc="2" Nb="3" Na="Supplementary pension" />
+    </category>
+    <category Nb="3" Na="Investment income" >
+        <sub_category Nbc="3" Nb="1" Na="Dividend" />
+		<sub_category Nbc="3" Nb="2" Na="Interest" />
+		<sub_category Nbc="3" Nb="3" Na="Capital gain" />
+    </category>
+    <category Nb="4" Na="Salary" >
+        <sub_category Nbc="4" Nb="1" Na="Overtime" />
+		<sub_category Nbc="4" Nb="2" Na="Leave allowance" />
+		<sub_category Nbc="4" Nb="3" Na="Misc. premiums" />
+		<sub_category Nbc="4" Nb="4" Na="Success fee" />
+		<sub_category Nbc="4" Nb="5" Na="Net salary" />
+    </category>
+    <category Nb="5" Na="Misc. income" >
+        <sub_category Nbc="5" Nb="1" Na="Gifts" />
+		<sub_category Nbc="5" Nb="2" Na="Refunds" />
+		<sub_category Nbc="5" Nb="3" Na="Second hand sales" />
+    </category>
+    <category Nb="6" Na="Food" >
+        <sub_category Nbc="6" Nb="1" Na="Bar" />
+		<sub_category Nbc="6" Nb="2" Na="Baker" />
+		<sub_category Nbc="6" Nb="3" Na="Canteen" />
+		<sub_category Nbc="6" Nb="4" Na="Sweets" />
+		<sub_category Nbc="6" Nb="5" Na="Misc" />
+		<sub_category Nbc="6" Nb="6" Na="Grocery" />
+		<sub_category Nbc="6" Nb="7" Na="Restaurant" />
+		<sub_category Nbc="6" Nb="8" Na="Self-service" />
+		<sub_category Nbc="6" Nb="9" Na="Supermarket" />
+    </category>
+    <category Nb="7" Na="Pets" >
+        <sub_category Nbc="7" Nb="1" Na="Food" />
+		<sub_category Nbc="7" Nb="2" Na="Various supplies" />
+		<sub_category Nbc="7" Nb="3" Na="Grooming" />
+		<sub_category Nbc="7" Nb="4" Na="Veterinary surgeon" />
+    </category>
+    <category Nb="8" Na="Insurance" >
+        <sub_category Nbc="8" Nb="1" Na="Car" />
+		<sub_category Nbc="8" Nb="2" Na="Health" />
+		<sub_category Nbc="8" Nb="3" Na="House" />
+		<sub_category Nbc="8" Nb="4" Na="Civil liability" />
+		<sub_category Nbc="8" Nb="5" Na="Life" />
+    </category>
+    <category Nb="9" Na="Car" >
+        <sub_category Nbc="9" Nb="1" Na="Fuel" />
+		<sub_category Nbc="9" Nb="2" Na="Repairs" />
+		<sub_category Nbc="9" Nb="3" Na="Maintenance" />
+		<sub_category Nbc="9" Nb="4" Na="Parking" />
+		<sub_category Nbc="9" Nb="5" Na="Fines" />
+    </category>
+    <category Nb="12" Na="Children" >
+        <sub_category Nbc="12" Nb="1" Na="Nurse" />
+		<sub_category Nbc="12" Nb="2" Na="Misc." />
+		<sub_category Nbc="12" Nb="3" Na="Studies" />
+    </category>
+    <category Nb="13" Na="Studies" >
+        <sub_category Nbc="13" Nb="1" Na="Lessons" />
+		<sub_category Nbc="13" Nb="2" Na="School fees" />
+		<sub_category Nbc="13" Nb="3" Na="Books" />
+    </category>
+    <category Nb="14" Na="Miscellaneous" >
+        <sub_category Nbc="14" Nb="1" Na="Gifts" />
+    </category>
+    <category Nb="15" Na="Financial expenses" >
+      	<sub_category Nbc="15" Nb="1" Na="Miscellaneous" />
+		<sub_category Nbc="15" Nb="2" Na="Bank charges" />
+		<sub_category Nbc="15" Nb="3" Na="Loan/Mortgage" />
+		<sub_category Nbc="15" Nb="4" Na="Charges" />
+		<sub_category Nbc="15" Nb="5" Na="Refunding" />
+    </category>
+    <category Nb="16" Na="Professional expenses" >
+        <sub_category Nbc="16" Nb="1" Na="Non refundable" />
+		<sub_category Nbc="16" Nb="2" Na="Refundable" />
+    </category>
+</expense_categories>

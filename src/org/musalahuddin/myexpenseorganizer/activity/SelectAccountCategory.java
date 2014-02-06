@@ -13,19 +13,21 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 import android.widget.TextView;
 
-public class SelectAccountCategory extends FragmentActivity implements LoaderManager.LoaderCallbacks<Cursor>,EditTextDialogListener {
+public class SelectAccountCategory extends FragmentActivity implements LoaderManager.LoaderCallbacks<Cursor>,EditTextDialogListener,AdapterView.OnItemClickListener {
 
 	private LoaderManager mManager;
 	private SimpleCursorAdapter mAdapter;
@@ -40,14 +42,19 @@ public class SelectAccountCategory extends FragmentActivity implements LoaderMan
      */
     private static final int DELETE_CAT = Menu.FIRST+2;
 	
+    boolean mManageOnly;
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.account_categories_list);
-		
-		setTitle(R.string.pref_manage_account_categories_title);
+		Intent intent = getIntent();
+		String action = intent.getAction();
+        mManageOnly = action != null && action.equals("myexpenseorganizer.intent.manage.accountcategories");
+        
+		setTitle(mManageOnly ? R.string.pref_manage_account_categories_title : R.string.select_account_category);
 		
 		ListView lv = (ListView) findViewById(R.id.list);
 		
@@ -67,6 +74,7 @@ public class SelectAccountCategory extends FragmentActivity implements LoaderMan
 		
 		lv.setAdapter(mAdapter);
 	    lv.setEmptyView(findViewById(R.id.empty));
+	    lv.setOnItemClickListener(this);
 	    registerForContextMenu(lv);
 	}
 	
@@ -214,6 +222,22 @@ public class SelectAccountCategory extends FragmentActivity implements LoaderMan
       Intent i = new Intent("myexpenseorganizer.intent.import.accountcategories");
       startActivity(i);
     }
+
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		// TODO Auto-generated method stub
+		//Toast.makeText(this, "You have chosen: " + position , Toast.LENGTH_SHORT).show();
+		if (mManageOnly)
+		     return;
+		Intent intent=new Intent();
+		long sub_cat = id;
+		String name =   ((TextView) view).getText().toString();
+		intent.putExtra("cat_id",sub_cat);
+		intent.putExtra("cat_name", name);
+		setResult(RESULT_OK,intent);
+		finish();
+	}
 
 		
 }

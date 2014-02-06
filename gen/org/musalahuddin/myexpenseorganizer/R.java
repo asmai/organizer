@@ -32,29 +32,39 @@ public final class R {
         public static final int squiggle=0x7f020005;
     }
     public static final class id {
-        public static final int CREATE_COMMAND=0x7f0a0008;
-        public static final int Description=0x7f0a0005;
-        public static final int Label=0x7f0a0004;
-        public static final int SETTINGS_COMMAND=0x7f0a0009;
+        public static final int CANCEL_COMMAND=0x7f0a0010;
+        public static final int CREATE_COMMAND=0x7f0a000d;
+        public static final int SAVE_COMMAND=0x7f0a000f;
+        public static final int SETTINGS_COMMAND=0x7f0a000e;
         public static final int Table=0x7f0a0003;
-        public static final int category_list=0x7f0a0007;
+        public static final int category_list=0x7f0a000c;
         public static final int empty=0x7f0a0001;
+        public static final int in_account_balance=0x7f0a0007;
+        public static final int in_account_category=0x7f0a000a;
+        public static final int in_account_description=0x7f0a0006;
+        public static final int in_account_due=0x7f0a0009;
+        public static final int in_account_limit=0x7f0a0008;
+        public static final int in_account_name=0x7f0a0004;
+        public static final int in_account_number=0x7f0a0005;
         public static final int list=0x7f0a0000;
         public static final int noCategories=0x7f0a0002;
-        public static final int picture=0x7f0a0006;
+        public static final int picture=0x7f0a000b;
     }
     public static final class layout {
         public static final int account_categories_list=0x7f030000;
         public static final int categories_list=0x7f030001;
         public static final int categories_list2=0x7f030002;
         public static final int edit_account=0x7f030003;
-        public static final int main=0x7f030004;
-        public static final int select_category=0x7f030005;
-        public static final int transaction_categories_list=0x7f030006;
+        public static final int edit_transaction=0x7f030004;
+        public static final int main=0x7f030005;
+        public static final int select_category=0x7f030006;
+        public static final int transaction_categories_list=0x7f030007;
     }
     public static final class menu {
-        public static final int categories=0x7f090000;
-        public static final int main=0x7f090001;
+        public static final int accounts=0x7f090000;
+        public static final int categories=0x7f090001;
+        public static final int edit=0x7f090002;
+        public static final int main=0x7f090003;
     }
     public static final class raw {
         public static final int account_categories=0x7f050000;
@@ -62,19 +72,27 @@ public final class R {
         public static final int transaction_categories=0x7f050002;
     }
     public static final class string {
+        public static final int account_balance=0x7f07002f;
+        public static final int account_category=0x7f070030;
+        public static final int account_description=0x7f07002a;
+        public static final int account_due=0x7f070037;
+        public static final int account_edit_title=0x7f070035;
+        public static final int account_limit=0x7f070031;
+        public static final int account_name=0x7f070029;
+        public static final int account_new_title=0x7f070034;
+        public static final int account_number=0x7f07002e;
+        public static final int account_overview_title=0x7f070033;
         public static final int action_settings=0x7f070001;
         public static final int alert_import_account_categories_title=0x7f07001d;
         public static final int alert_import_expense_categories_title=0x7f07000b;
         public static final int alert_import_transaction_categories_title=0x7f07001c;
         public static final int app_name=0x7f070000;
-        public static final int description=0x7f07002a;
         public static final int hello_world=0x7f070002;
         public static final int import_alert_cancel=0x7f07000d;
         public static final int import_alert_ok=0x7f07000c;
         public static final int import_categories=0x7f070008;
         public static final int import_categories_success=0x7f070010;
         public static final int import_parsing=0x7f07000e;
-        public static final int label=0x7f070029;
         public static final int menu_create_account_cat=0x7f070025;
         public static final int menu_create_main_cat=0x7f070019;
         public static final int menu_create_sub_cat=0x7f070012;
@@ -107,6 +125,8 @@ public final class R {
         public static final int pref_manage_expense_categories_title=0x7f070020;
         public static final int pref_manage_transaction_categories_summary=0x7f070024;
         public static final int pref_manage_transaction_categories_title=0x7f070021;
+        public static final int select=0x7f070032;
+        public static final int select_account_category=0x7f070036;
         public static final int test=0x7f070011;
     }
     public static final class style {

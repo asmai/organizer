@@ -4,7 +4,7 @@
     <string name="app_name">My Expense Organizer</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-    <string name="menu_settings">Settings bhai</string>
+    <string name="menu_settings">Settings</string>
     <string name="pref_manage_categories_title">Expense categories</string>
     <string name="pref_manage_categories_summary">Add, edit, delete expense categories.</string>
     <string name="pref_category_title_manage">Manage</string>
@@ -26,7 +26,7 @@
     <string name="pref_import_expense_categories_title">Import categories</string>
     <string name="pref_import_expense_categories_summary">Import default categories.</string>
     <string name="no_title_given">You did not enter any title.</string>
-    <string name="menu_create_main_cat">New main category</string>
+    <string name="menu_create_main_cat">New</string>
     <string name="pref_import_transaction_categories_title">Import transaction methods</string>
     <string name="pref_import_transaction_categories_summary">Import default transaction methods.</string>
     <string name="alert_import_transaction_categories_title">Import Transaction Methods</string>
@@ -42,10 +42,20 @@
     <string name="menu_create_transaction_cat">New transaction method</string>
     <string name="menu_edit_account_cat">Edit account category</string>
     <string name="menu_edit_transaction_cat">Edit transaction method</string>
-    <string name="label">Name</string>
-    <string name="description">Description</string>
+    <string name="account_name">Name</string>
+    <string name="account_description">Description</string>
     <string name="picture_camera">Take a Picture</string>
     <string name="picture_gallery">Select from Gallery</string>
     <string name="picture_clear">Delete Picture</string>
+    <string name="account_number">Last 4 digits</string>
+    <string name="account_balance">Initial balance</string>
+    <string name="account_category">Category</string>
+    <string name="account_limit">Credit limit</string>
+    <string name="select">Select type</string>
+    <string name="account_overview_title">Accounts</string>
+    <string name="account_new_title">New account</string>
+    <string name="account_edit_title">Edit Account</string>
+    <string name="select_account_category">Select account category</string>
+    <string name="account_due">Due Date</string>
 
 </resources>

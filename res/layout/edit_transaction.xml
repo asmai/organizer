@@ -26,83 +26,32 @@
        android:id="@+id/Table"
        android:stretchColumns="1"
        android:shrinkColumns="1">
-      <TableRow>
+      <!--TableRow>
         <TextView style="@style/form_label"
-            android:text="@string/account_name" />
+            android:text="@string/label" />
         <EditText
-            android:id="@+id/in_account_name" 
+            android:id="@+id/Label" 
             android:layout_width="wrap_content" 
-            android:layout_height="wrap_content"
-            android:imeOptions="flagNoExtractUi" />
+            android:layout_height="wrap_content" />
       </TableRow>
 
       <TableRow>
         <TextView style="@style/form_label"
-            android:text="@string/account_number" />
+            android:text="@string/description" />
         <EditText
-            android:id="@+id/in_account_number" 
+            android:id="@+id/Description" 
             android:layout_width="wrap_content" 
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:imeOptions="flagNoExtractUi"
-            android:maxLength="4" />
-      </TableRow>
+            android:layout_height="wrap_content" />
+      </TableRow-->
       
       <TableRow>
-        <TextView style="@style/form_label"
-            android:text="@string/account_description" />
-        <EditText
-            android:id="@+id/in_account_description" 
-            android:layout_width="wrap_content" 
-            android:layout_height="wrap_content"
-            android:imeOptions="flagNoExtractUi" />
+        <ImageButton
+            android:id="@+id/picture"
+	    	android:layout_width="100dip"
+	    	android:layout_height="100dip"
+            android:background="@android:color/transparent"
+	    	android:src="@drawable/camera_button"/>
       </TableRow>
-  
-      <TableRow>
-        <TextView style="@style/form_label"
-            android:text="@string/account_balance" />
-        <EditText
-            android:id="@+id/in_account_balance" 
-            android:layout_width="wrap_content" 
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:imeOptions="flagNoExtractUi" />
-      </TableRow>
-      
-      <TableRow>
-        <TextView style="@style/form_label"
-            android:text="@string/account_limit" />
-        <EditText
-            android:id="@+id/in_account_limit" 
-            android:layout_width="wrap_content" 
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:imeOptions="flagNoExtractUi" />
-      </TableRow>
-      
-      <TableRow>
-        <TextView style="@style/form_label"
-            android:text="@string/account_due" />
-          <Button
-              android:layout_width="wrap_content" 
-              android:layout_height="wrap_content" 
-              android:id="@+id/in_account_due"
-              style="?android:attr/spinnerStyle"/>
-      </TableRow>
-      
-      <TableRow>
-        <TextView style="@style/form_label"
-            android:text="@string/account_category" />
-          <Button
-              android:layout_width="wrap_content" 
-              android:layout_height="wrap_content" 
-              android:id="@+id/in_account_category"
-              style="?android:attr/spinnerStyle"/>
-      </TableRow>
-      
-     
-      
-      
       
       <!-->TableRow>
         <TextView style="@style/form_label"

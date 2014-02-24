@@ -47,15 +47,26 @@
     <string name="picture_camera">Take a Picture</string>
     <string name="picture_gallery">Select from Gallery</string>
     <string name="picture_clear">Delete Picture</string>
-    <string name="account_number">Last 4 digits</string>
-    <string name="account_balance">Initial balance</string>
+    <string name="account_number">Account #</string>
+    <string name="account_balance">Balance</string>
     <string name="account_category">Category</string>
-    <string name="account_limit">Credit limit</string>
+    <string name="account_limit">Limit</string>
     <string name="select">Select type</string>
     <string name="account_overview_title">Accounts</string>
     <string name="account_new_title">New account</string>
     <string name="account_edit_title">Edit Account</string>
     <string name="select_account_category">Select account category</string>
-    <string name="account_due">Due Date</string>
+    <string name="account_due">Due date</string>
+    <string name="account_payment">Payment</string>
+    <string name="hint_account_name">Name</string>
+    <string name="hint_account_number">Last 4 digits</string>
+    <string name="hint_account_description">Description</string>
+    <string name="hint_account_balance">Initial balance</string>
+    <string name="hint_account_limit">Credit limit</string>
+    <string name="hint_account_payment">Monthly payment</string>
+    <string name="hint_account_due">Date</string>
+    <string name="hint_account_category">Category</string>
+    <string name="alert_dialog_ok">OK</string>
+    <string name="alert_dialog_cancel">Cancel</string>
 
 </resources>

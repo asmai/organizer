@@ -67,6 +67,13 @@
             <category android:name="android.intent.category.DEFAULT" />
           </intent-filter>
         </activity>
+        <activity android:name=".activity.AddField"
+            android:theme="@android:style/Theme.Holo.Dialog">
+          <intent-filter>
+            <action android:name="myexpenseorganizer.intent.add.formfield"/>
+            <category android:name="android.intent.category.DEFAULT" />
+          </intent-filter>
+        </activity>
         <provider
            android:exported="false"
            android:name=".provider.MyExpenseOrganizerProvider"

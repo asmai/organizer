@@ -30,6 +30,8 @@ public class MyExpenseOrganizerProvider extends ContentProvider{
 	private static final int ACCOUNT_CATEGORIES_ID = 6;
 	private static final int TRANSACTION_CATEGORIES = 7;
 	private static final int TRANSACTION_CATEGORIES_ID = 8;
+	private static final int ACCOUNTS = 9;
+	private static final int ACCOUNTS_ID = 10;
 	
 	// Authority
 	public static final String AUTHORITY = "org.musalahuddin.myexpenseorganizer";
@@ -42,6 +44,8 @@ public class MyExpenseOrganizerProvider extends ContentProvider{
 			Uri.parse("content://" + AUTHORITY + "/account_categories");
 	public static final Uri TRANSACTION_CATEGORIES_URI = 
 			Uri.parse("content://" + AUTHORITY + "/transaction_categories");
+	public static final Uri ACCOUNTS_URI = 
+			Uri.parse("content://" + AUTHORITY + "/accounts");
 	
 	static {
 	    URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
@@ -53,6 +57,8 @@ public class MyExpenseOrganizerProvider extends ContentProvider{
 	    URI_MATCHER.addURI(AUTHORITY, "account_categories/#", ACCOUNT_CATEGORIES_ID);
 	    URI_MATCHER.addURI(AUTHORITY, "transaction_categories", TRANSACTION_CATEGORIES);
 	    URI_MATCHER.addURI(AUTHORITY, "transaction_categories/#", TRANSACTION_CATEGORIES_ID);
+	    URI_MATCHER.addURI(AUTHORITY, "accounts", ACCOUNTS);
+	    URI_MATCHER.addURI(AUTHORITY, "accounts/#", ACCOUNTS_ID);
 	}
 	
 	
@@ -243,23 +249,20 @@ public class MyExpenseOrganizerProvider extends ContentProvider{
 			break;
 			
 		case ACCOUNT_CATEGORIES:
-			name = values.getAsString(AccountCategoryTable.COLUMN_NAME);
-			
-			selection = AccountCategoryTable.COLUMN_NAME + " = ?";
-			selectionArgs = new String[]{name};
 			
 			id = db.insertOrThrow(AccountCategoryTable.TABLE_ACCOUNT_CATEGORY, null, values);
 			newUri = ACCOUNT_CATEGORIES + "/" + id;
 			break;
 			
 		case TRANSACTION_CATEGORIES:
-			name = values.getAsString(TransactionCategoryTable.COLUMN_NAME);
-			
-			selection = TransactionCategoryTable.COLUMN_NAME + " = ?";
-			selectionArgs = new String[]{name};
 			
 			id = db.insertOrThrow(TransactionCategoryTable.TABLE_TRANSACTION_CATEGORY, null, values);
 			newUri = TRANSACTION_CATEGORIES + "/" + id;
+			break;
+			
+		case ACCOUNTS:
+			id = db.insertOrThrow(AccountTable.TABLE_ACCOUNT, null, values);
+			newUri = ACCOUNTS + "/" + id;
 			break;
 			
 		 default:

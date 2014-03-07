@@ -1,8 +1,10 @@
 package org.musalahuddin.myexpenseorganizer.activity;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 
 import org.musalahuddin.myexpenseorganizer.R;
 import org.musalahuddin.myexpenseorganizer.camera.CameraModule;
@@ -11,6 +13,7 @@ import org.musalahuddin.myexpenseorganizer.camera.CameraModule.ClearImageCallbac
 import org.musalahuddin.myexpenseorganizer.database.AccountTable;
 import org.musalahuddin.myexpenseorganizer.util.Utils;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,13 +34,16 @@ import android.widget.TextView;
 import android.widget.EditText;
 import android.widget.Toast;
 
+
 public class EditAccount extends FragmentActivity implements View.OnClickListener{
 	
 	private static final int SELECT_CATEGORY_REQUEST = 1;
 	private static final int SELECT_FIELD_REQUEST = 2;
 	
+	private long accountId = 0L;
+	
 	private Long mAccountCatId = 0L;
-	private Long mAccountDueDate = 0L;
+	private long mAccountDueDate = 0L;
 	private String mAccountCatName; 
 	private Calendar mCalendar = Calendar.getInstance();
 	
@@ -68,7 +74,10 @@ public class EditAccount extends FragmentActivity implements View.OnClickListene
 	
 	private ArrayList<Field> fields = new ArrayList<Field>();
 	private Integer[] fieldIds;
+	
+	private final java.text.DateFormat mTitleDateFormat = java.text.DateFormat.getDateInstance(java.text.DateFormat.FULL);
 	 
+	boolean mAddOnly;
 	
 	protected class Field{
 		int fieldId; 
@@ -101,9 +110,14 @@ public class EditAccount extends FragmentActivity implements View.OnClickListene
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.edit_account);
-		setTitle(R.string.account_new_title);
-		Log.i("time: " , String.valueOf(System.currentTimeMillis()));
+		Intent intent = getIntent();
+		String action = intent.getAction();
+        mAddOnly = action != null && action.equals("myexpenseorganizer.intent.add.accounts");
 		
+        setTitle(mAddOnly ? R.string.account_new_title : R.string.account_edit_title);
+		//Log.i("time: " , String.valueOf(System.currentTimeMillis()));
+		
+        
 		mAccountNameText = (EditText) findViewById(R.id.in_account_name);
 		mAccountNumText = (EditText) findViewById(R.id.in_account_number);
 	    mAccountDescText= (EditText) findViewById(R.id.in_account_description);
@@ -136,6 +150,36 @@ public class EditAccount extends FragmentActivity implements View.OnClickListene
 		mAccountDueButton.setOnClickListener(this);
 		mAddFieldButton.setOnClickListener(this);
 		
+		populateFields();
+		
+	}
+	
+	private void populateFields(){
+		
+		Bundle extras = getIntent().getExtras();
+		long accountId = extras != null ? extras.getLong(AccountTable.COLUMN_ID):0L;
+		DecimalFormat f = new DecimalFormat("0.00");
+		if(accountId != 0L){
+			TableRow row;
+			//make all fields visible if populating the fields
+			for(Field field: fields){
+				row = (TableRow) findViewById(field.getFieldId());
+				row.setVisibility(View.VISIBLE);
+			}
+			
+			//hide add field button
+			row = (TableRow) findViewById(R.id.row_add_field);
+			row.setVisibility(View.GONE);
+			
+			//populate fields
+			mAccountNameText.setText(extras.getString(AccountTable.COLUMN_NAME));
+			mAccountNumText.setText(String.valueOf(extras.getInt(AccountTable.COLUMN_NUMBER)));
+			mAccountDescText.setText(extras.getString(AccountTable.COLUMN_DESCRIPTION));
+			mAccountBalText.setText(f.format(extras.getDouble(AccountTable.COLUMN_INIT_BALANCE)).toString());
+			mAccountLimitText.setText(f.format(extras.getDouble(AccountTable.COLUMN_CREDIT_LIMIT)).toString());
+			mAccountPayText.setText(f.format(extras.getDouble(AccountTable.COLUMN_MONTHLY_PAYMENT)).toString());
+			mAccountCatButton.setText(extras.getString(AccountTable.COLUMN_ACCOUNT_CATEGORY_NAME));
+		}
 	}
 	
 	@Override
@@ -226,6 +270,7 @@ public class EditAccount extends FragmentActivity implements View.OnClickListene
 			if (intent != null) {
 				Bundle b = intent.getExtras();
 				displayFields(b);
+				checkFields();
 			}
 			break;
 		}
@@ -237,10 +282,18 @@ public class EditAccount extends FragmentActivity implements View.OnClickListene
 	 */
 	private void setDate() {
 		mAccountDueDate = mCalendar.getTimeInMillis();
-		int day = mCalendar.get(Calendar.DAY_OF_MONTH);
-		String suffix = getDateSuffix(day);
+		/*
+		int dayOfMonth = mCalendar.get(Calendar.DAY_OF_MONTH);
+		String day = mCalendar.getDisplayName(Calendar.DAY_OF_WEEK,Calendar.LONG,Locale.US);
+		String month = mCalendar.getDisplayName(Calendar.MONTH,Calendar.LONG,Locale.US);
+		int year = mCalendar.get(Calendar.YEAR);
+		//mAccountDueDate = day;
 		
-		mAccountDueButton.setText(String.valueOf(day)+suffix+" of every month");
+		String suffix = getDateSuffix(dayOfMonth);
+		
+		mAccountDueButton.setText(day+ ", "+month+", "+String.valueOf(dayOfMonth)+suffix+", "+String.valueOf(year));
+		*/
+		mAccountDueButton.setText(mTitleDateFormat.format(mCalendar.getTime()));
 	}
 	
 	/**
@@ -276,7 +329,8 @@ public class EditAccount extends FragmentActivity implements View.OnClickListene
 			Toast.makeText(this, "Please select account category", Toast.LENGTH_LONG).show();
 			return false;
 		}
-		if(name.equals("")){
+		//if(name.equals("")){
+		if(TextUtils.isEmpty(name.trim())){
 			Toast.makeText(this, "Please enter account name", Toast.LENGTH_LONG).show();
 			return false;
 		}
@@ -404,6 +458,27 @@ public class EditAccount extends FragmentActivity implements View.OnClickListene
 				row = (TableRow) findViewById(fieldIds[i]);
 				row.setVisibility(View.VISIBLE);
 			}
+		}
+	}
+	
+	protected void checkFields(){
+		
+		boolean hiddenField = false;
+		TableRow row;
+		
+		for(Field field: fields){
+			row = (TableRow) findViewById(field.getFieldId());
+			if(row.getVisibility() == View.GONE){
+				hiddenField = true;
+				break;
+			}
+		}
+		
+		// if all fields are visible then hide add file button
+		if(!hiddenField){
+			//hide add field button
+			row = (TableRow) findViewById(R.id.row_add_field);
+			row.setVisibility(View.GONE);
 		}
 	}
 	

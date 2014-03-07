@@ -32,6 +32,7 @@ public class MyExpenseOrganizerProvider extends ContentProvider{
 	private static final int TRANSACTION_CATEGORIES_ID = 8;
 	private static final int ACCOUNTS = 9;
 	private static final int ACCOUNTS_ID = 10;
+	private static final int VIEW_ACCOUNTS = 11;
 	
 	// Authority
 	public static final String AUTHORITY = "org.musalahuddin.myexpenseorganizer";
@@ -46,6 +47,8 @@ public class MyExpenseOrganizerProvider extends ContentProvider{
 			Uri.parse("content://" + AUTHORITY + "/transaction_categories");
 	public static final Uri ACCOUNTS_URI = 
 			Uri.parse("content://" + AUTHORITY + "/accounts");
+	public static final Uri VIEW_ACCOUNTS_URI = 
+			Uri.parse("content://" + AUTHORITY + "/view_accounts");
 	
 	static {
 	    URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
@@ -59,6 +62,7 @@ public class MyExpenseOrganizerProvider extends ContentProvider{
 	    URI_MATCHER.addURI(AUTHORITY, "transaction_categories/#", TRANSACTION_CATEGORIES_ID);
 	    URI_MATCHER.addURI(AUTHORITY, "accounts", ACCOUNTS);
 	    URI_MATCHER.addURI(AUTHORITY, "accounts/#", ACCOUNTS_ID);
+	    URI_MATCHER.addURI(AUTHORITY, "view_accounts", VIEW_ACCOUNTS);
 	}
 	
 	
@@ -127,6 +131,14 @@ public class MyExpenseOrganizerProvider extends ContentProvider{
 			qb.appendWhere(TransactionCategoryTable.COLUMN_ID + "=" + uri.getPathSegments().get(1));
 			break;
 			
+		case ACCOUNTS:
+			qb.setTables(AccountTable.TABLE_ACCOUNT);
+			break;
+			
+		case VIEW_ACCOUNTS:
+			qb.setTables(AccountView.VIEW_ACCOUNT);
+			break;
+			
 		default:
 			throw new IllegalArgumentException("Unknown URL " + uri);
 		}
@@ -181,6 +193,17 @@ public class MyExpenseOrganizerProvider extends ContentProvider{
 		case TRANSACTION_CATEGORIES_ID:
 			selection = TransactionCategoryTable.COLUMN_ID + " = " +  uri.getPathSegments().get(1);
 			count = db.delete(TransactionCategoryTable.TABLE_TRANSACTION_CATEGORY, selection, selectionArgs);
+			break;
+		case ACCOUNTS:
+			count = db.delete(AccountTable.TABLE_ACCOUNT, selection, selectionArgs);
+			//notify the accounts view uri
+			getContext().getContentResolver().notifyChange(VIEW_ACCOUNTS_URI, null);
+			break;
+		case ACCOUNTS_ID:
+			selection = AccountTable.COLUMN_ID + " = " +  uri.getPathSegments().get(1);
+			count = db.delete(AccountTable.TABLE_ACCOUNT, selection, selectionArgs);
+			//notify the accounts view uri
+			getContext().getContentResolver().notifyChange(VIEW_ACCOUNTS_URI, null);
 			break;
 			
 		default:
@@ -262,6 +285,8 @@ public class MyExpenseOrganizerProvider extends ContentProvider{
 			
 		case ACCOUNTS:
 			id = db.insertOrThrow(AccountTable.TABLE_ACCOUNT, null, values);
+			//notify the accounts view uri
+			getContext().getContentResolver().notifyChange(VIEW_ACCOUNTS_URI, null);
 			newUri = ACCOUNTS + "/" + id;
 			break;
 			

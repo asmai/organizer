@@ -32,44 +32,52 @@ public final class R {
         public static final int squiggle=0x7f020005;
     }
     public static final class id {
-        public static final int CANCEL_COMMAND=0x7f0a001b;
-        public static final int CREATE_COMMAND=0x7f0a0018;
-        public static final int SAVE_COMMAND=0x7f0a001a;
-        public static final int SETTINGS_COMMAND=0x7f0a0019;
-        public static final int Table=0x7f0a0003;
-        public static final int add_field=0x7f0a0015;
-        public static final int category_list=0x7f0a0017;
+        public static final int CANCEL_COMMAND=0x7f0a0021;
+        public static final int CREATE_COMMAND=0x7f0a001e;
+        public static final int SAVE_COMMAND=0x7f0a0020;
+        public static final int SETTINGS_COMMAND=0x7f0a001f;
+        public static final int Table=0x7f0a000e;
+        public static final int account_balance=0x7f0a0005;
+        public static final int account_category=0x7f0a0007;
+        public static final int account_due=0x7f0a000d;
+        public static final int account_limit=0x7f0a000b;
+        public static final int account_name=0x7f0a0004;
+        public static final int account_payment=0x7f0a0009;
+        public static final int add_field=0x7f0a001b;
+        public static final int category_list=0x7f0a001d;
         public static final int empty=0x7f0a0001;
-        public static final int in_account_balance=0x7f0a000b;
-        public static final int in_account_category=0x7f0a0013;
-        public static final int in_account_description=0x7f0a0009;
-        public static final int in_account_due=0x7f0a0011;
-        public static final int in_account_limit=0x7f0a000d;
-        public static final int in_account_name=0x7f0a0005;
-        public static final int in_account_number=0x7f0a0007;
-        public static final int in_account_payment=0x7f0a000f;
+        public static final int in_account_balance=0x7f0a0015;
+        public static final int in_account_category=0x7f0a0019;
+        public static final int in_account_description=0x7f0a0013;
+        public static final int in_account_due=0x7f0a0018;
+        public static final int in_account_limit=0x7f0a0016;
+        public static final int in_account_name=0x7f0a000f;
+        public static final int in_account_number=0x7f0a0011;
+        public static final int in_account_payment=0x7f0a0017;
         public static final int list=0x7f0a0000;
         public static final int noCategories=0x7f0a0002;
-        public static final int picture=0x7f0a0016;
-        public static final int row_account_balance=0x7f0a000a;
-        public static final int row_account_category=0x7f0a0012;
-        public static final int row_account_description=0x7f0a0008;
-        public static final int row_account_due=0x7f0a0010;
-        public static final int row_account_limit=0x7f0a000c;
-        public static final int row_account_name=0x7f0a0004;
-        public static final int row_account_number=0x7f0a0006;
-        public static final int row_account_payment=0x7f0a000e;
-        public static final int row_add_field=0x7f0a0014;
+        public static final int picture=0x7f0a001c;
+        public static final int row_account_balance=0x7f0a0014;
+        public static final int row_account_category=0x7f0a0006;
+        public static final int row_account_description=0x7f0a0012;
+        public static final int row_account_due=0x7f0a000c;
+        public static final int row_account_limit=0x7f0a000a;
+        public static final int row_account_name=0x7f0a0003;
+        public static final int row_account_number=0x7f0a0010;
+        public static final int row_account_payment=0x7f0a0008;
+        public static final int row_add_field=0x7f0a001a;
     }
     public static final class layout {
         public static final int account_categories_list=0x7f030000;
-        public static final int categories_list=0x7f030001;
-        public static final int categories_list2=0x7f030002;
-        public static final int edit_account=0x7f030003;
-        public static final int edit_transaction=0x7f030004;
-        public static final int main=0x7f030005;
-        public static final int select_category=0x7f030006;
-        public static final int transaction_categories_list=0x7f030007;
+        public static final int account_row=0x7f030001;
+        public static final int accounts_list=0x7f030002;
+        public static final int categories_list=0x7f030003;
+        public static final int categories_list2=0x7f030004;
+        public static final int edit_account=0x7f030005;
+        public static final int edit_transaction=0x7f030006;
+        public static final int main=0x7f030007;
+        public static final int select_category=0x7f030008;
+        public static final int transaction_categories_list=0x7f030009;
     }
     public static final class menu {
         public static final int accounts=0x7f090000;
@@ -120,6 +128,7 @@ public final class R {
         public static final int menu_create_sub_cat=0x7f070012;
         public static final int menu_create_transaction_cat=0x7f070026;
         public static final int menu_delete=0x7f070013;
+        public static final int menu_edit_account=0x7f070043;
         public static final int menu_edit_account_cat=0x7f070027;
         public static final int menu_edit_cat=0x7f070014;
         public static final int menu_edit_transaction_cat=0x7f070028;
@@ -178,6 +187,7 @@ public final class R {
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f080001;
+        public static final int Holo_Dialog_NoTitleBar=0x7f080004;
         /**  A theme that has a translucent background.  Here we explicitly specify
          that this theme is to inherit from the system's translucent theme,
          which sets up various attributes correctly. 

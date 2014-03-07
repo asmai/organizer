@@ -566,7 +566,7 @@ public class CatImport extends Activity implements DialogInterface.OnClickListen
 			task.execute();
 			break;
 		case AlertDialog.BUTTON_NEGATIVE:
-			dismissDialog(IMPORT_DIALOG_ID);
+			//dismissDialog(IMPORT_DIALOG_ID);
 			finish();
 			break;
 		

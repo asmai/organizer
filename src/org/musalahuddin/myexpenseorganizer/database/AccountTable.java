@@ -15,7 +15,8 @@ public class AccountTable extends Model{
 	// Table columns
 	public static final String TABLE_ACCOUNT = "accounts";
 	public static final String COLUMN_ID = "_id";
-	public static final String COLUMN_ACC0UNT_CATEGORY_ID = "account_category_id";
+	public static final String COLUMN_ACCOUNT_CATEGORY_ID = "account_category_id";
+	public static final String COLUMN_ACCOUNT_CATEGORY_NAME = "account_category_name";
 	public static final String COLUMN_NAME = "name";
 	public static final String COLUMN_NUMBER = "number";
 	public static final String COLUMN_DESCRIPTION = "description";
@@ -32,7 +33,7 @@ public class AccountTable extends Model{
 	private static final String DATABASE_CREATE = "create table " 
 			+ TABLE_ACCOUNT
 			+ "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
-			+ COLUMN_ACC0UNT_CATEGORY_ID + " INTEGER NOT NULL, "
+			+ COLUMN_ACCOUNT_CATEGORY_ID + " INTEGER NOT NULL, "
 			+ COLUMN_NAME + " TEXT," 
 			+ COLUMN_NUMBER + " INTEGER, "
 			+ COLUMN_DESCRIPTION + " TEXT, " 
@@ -44,7 +45,7 @@ public class AccountTable extends Model{
 			+ COLUMN_MOD_DATE + " INTEGER, "
 			+ COLUMN_DELETE_DATE + " INTEGER, " 
 			+ COLUMN_DELETED + " INTERGER DEFAULT 0 NOT NULL, "
-			+ "FOREIGN KEY(" + COLUMN_ACC0UNT_CATEGORY_ID + ") REFERENCES "+AccountCategoryTable.TABLE_ACCOUNT_CATEGORY+"("+AccountCategoryTable.COLUMN_ID+")"
+			+ "FOREIGN KEY(" + COLUMN_ACCOUNT_CATEGORY_ID + ") REFERENCES "+AccountCategoryTable.TABLE_ACCOUNT_CATEGORY+"("+AccountCategoryTable.COLUMN_ID+")"
 			+ ");";
 	
 	public static void onCreate(SQLiteDatabase database) {
@@ -58,6 +59,17 @@ public class AccountTable extends Model{
 				+ ", which will destroy all old data");
 		database.execSQL("DROP TABLE IF EXISTS " + TABLE_ACCOUNT);
 		onCreate(database);
+	}
+	
+	public static boolean delete(Long id){
+		try{
+			return cr().delete(CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build(),
+			        null, null) > 0;
+		}
+		catch (SQLiteConstraintException e){
+			Log.i("delete",e.getMessage());
+			return false;
+		}
 	}
 	
 	/**
@@ -89,7 +101,7 @@ public class AccountTable extends Model{
 		initialValues.put(COLUMN_CREDIT_LIMIT, (int)credit_limit);
 		initialValues.put(COLUMN_MONTHLY_PAYMENT, (int)monthly_payment);
 		initialValues.put(COLUMN_DUE_DATE, due_date);
-		initialValues.put(COLUMN_ACC0UNT_CATEGORY_ID, account_category_id);
+		initialValues.put(COLUMN_ACCOUNT_CATEGORY_ID, account_category_id);
 		Uri uri;
 		try{
 			uri = cr().insert(CONTENT_URI,initialValues);

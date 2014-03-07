@@ -33,7 +33,8 @@
         <activity android:name=".activity.EditAccount"
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize">
             <intent-filter>  
-				<action android:name="myexpenseorganizer.intent.manage.accounts"/>  
+				<action android:name="myexpenseorganizer.intent.add.accounts"/>
+				<action android:name="myexpenseorganizer.intent.adit.accounts"/>   
               	<category android:name="android.intent.category.DEFAULT" />
           	</intent-filter>
         </activity>

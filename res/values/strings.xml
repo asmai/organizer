@@ -68,5 +68,6 @@
     <string name="hint_account_category">Category</string>
     <string name="alert_dialog_ok">OK</string>
     <string name="alert_dialog_cancel">Cancel</string>
+    <string name="menu_edit_account">Edit/View Account</string>
 
 </resources>

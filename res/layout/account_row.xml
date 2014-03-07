@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal">
+  <TableLayout
+      android:layout_height="wrap_content"
+      android:layout_width="0dp"
+      android:layout_weight="1"
+      android:stretchColumns="1"
+      android:shrinkColumns="1">
+		   <TableRow
+		       android:id="@+id/row_account_name"
+		       android:background="#99CCCC">
+			    <TextView 
+			        android:text="Name" 
+			        android:id="@+id/account_name"
+			        android:textColor="#9933FF"/>
+			    <TextView 
+			        android:text="Balance" 
+			        android:id="@+id/account_balance"
+			        android:gravity="right"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"/>
+		  </TableRow>
+		  <TableRow
+		      android:id="@+id/row_account_category" >
+			    <TextView
+            		android:text="@string/account_category" />
+			    <TextView 
+			        android:text="" 
+			        android:id="@+id/account_category"
+			        android:gravity="right"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_span="2" />
+		  </TableRow>
+		  <TableRow
+		      android:id="@+id/row_account_payment" >
+			    <TextView
+            		android:text="@string/account_payment" />
+			    <TextView 
+			        android:text="" 
+			        android:id="@+id/account_payment"
+			        android:gravity="right"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content" />
+		  </TableRow>
+		  <TableRow
+		      android:id="@+id/row_account_limit" >
+			    <TextView
+            		android:text="@string/account_limit" />
+			    <TextView 
+			        android:text="" 
+			        android:id="@+id/account_limit"
+			        android:gravity="right"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content" />
+		  </TableRow>
+		  <TableRow
+		      android:id="@+id/row_account_due" >
+			    <TextView
+            		android:text="@string/account_due" />
+			    <TextView 
+			        android:text="" 
+			        android:id="@+id/account_due"
+			        android:gravity="right"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content" />
+		  </TableRow>
+  </TableLayout>
+</LinearLayout>

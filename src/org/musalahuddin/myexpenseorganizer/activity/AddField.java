@@ -81,11 +81,11 @@ public class AddField extends Activity implements DialogInterface.OnClickListene
 			i.putExtras(b);
 			setResult(RESULT_OK,i);
 			
-			dismissDialog(FIELD_DIALOG_ID);
+			//dismissDialog(FIELD_DIALOG_ID);
 			finish();
 			break;
 		case AlertDialog.BUTTON_NEGATIVE:
-			dismissDialog(FIELD_DIALOG_ID);
+			//dismissDialog(FIELD_DIALOG_ID);
 			finish();
 			break;
 		}

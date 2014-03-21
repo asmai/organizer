@@ -423,6 +423,37 @@ public class MyExpenseOrganizerProvider extends ContentProvider{
 			count = db.update(TransactionCategoryTable.TABLE_TRANSACTION_CATEGORY, values, selection, selectionArgs);
 			break;
 			
+		case ACCOUNTS:
+			// bulk update should not be supported
+			count = db.update(AccountTable.TABLE_ACCOUNT, values, selection, selectionArgs);
+			break;
+			
+		case ACCOUNTS_ID:
+			
+			/*
+			name = values.getAsString(AccountTable.COLUMN_NAME);
+			
+			selection = AccountTable.COLUMN_NAME + " = ?";
+			selectionArgs = new String[]{name};
+			
+			mCursor = db.query(AccountTable.TABLE_ACCOUNT,
+					new String []{AccountTable.COLUMN_ID},
+					selection, selectionArgs, null, null, null);
+			
+			if(mCursor.getCount() != 0){
+				mCursor.close();
+		        throw new SQLiteConstraintException();
+			}
+			
+			mCursor.close();
+			*/
+			selection = AccountTable.COLUMN_ID + " = " +  uri.getPathSegments().get(1);
+			selectionArgs = null;
+			count = db.update(AccountTable.TABLE_ACCOUNT, values, selection, selectionArgs);
+			//notify the accounts view uri
+			getContext().getContentResolver().notifyChange(VIEW_ACCOUNTS_URI, null);
+			break;
+			
 		default:
 				throw new IllegalArgumentException("Unknown URL " + uri);
 		}

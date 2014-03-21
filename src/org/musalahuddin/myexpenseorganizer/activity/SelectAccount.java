@@ -256,6 +256,7 @@ public class SelectAccount extends FragmentActivity implements LoaderManager.Loa
 				AccountTable.COLUMN_ID, 
 				AccountTable.COLUMN_NAME,
 				AccountTable.COLUMN_DESCRIPTION,
+				AccountTable.COLUMN_ACCOUNT_CATEGORY_ID,
 				AccountTable.COLUMN_ACCOUNT_CATEGORY_NAME, 
 				AccountTable.COLUMN_NUMBER, 
 				AccountTable.COLUMN_INIT_BALANCE,
@@ -300,6 +301,7 @@ public class SelectAccount extends FragmentActivity implements LoaderManager.Loa
 		double payment = c.getDouble(c.getColumnIndex(AccountTable.COLUMN_MONTHLY_PAYMENT))/100;
 		double limit = c.getDouble(c.getColumnIndex(AccountTable.COLUMN_CREDIT_LIMIT))/100;
 		String description = c.getString(c.getColumnIndex(AccountTable.COLUMN_DESCRIPTION));
+		long categoryId = c.getLong(c.getColumnIndex(AccountTable.COLUMN_ACCOUNT_CATEGORY_ID));
 		String categoryName = c.getString(c.getColumnIndex(AccountTable.COLUMN_ACCOUNT_CATEGORY_NAME));
 		
 		Bundle b = new Bundle();
@@ -311,6 +313,7 @@ public class SelectAccount extends FragmentActivity implements LoaderManager.Loa
 		b.putDouble(AccountTable.COLUMN_DUE_DATE,due);
 		b.putDouble(AccountTable.COLUMN_MONTHLY_PAYMENT,payment);
 		b.putDouble(AccountTable.COLUMN_CREDIT_LIMIT, limit);
+		b.putLong(AccountTable.COLUMN_ACCOUNT_CATEGORY_ID,categoryId);
 		b.putString(AccountTable.COLUMN_ACCOUNT_CATEGORY_NAME,categoryName);
 		b.putLong(AccountTable.COLUMN_DUE_DATE,due);
 		

@@ -73,9 +73,9 @@ public class AccountTable extends Model{
 	}
 	
 	/**
-	 * Creates a new Category
+	 * Creates a new Account
 	 * @param name
-	 * @return the row id of the newly inserted row, of -1 if category already exists
+	 * @return the row id of the newly inserted row, of -1 if Account already exists
 	 */
 	public static long create(
 			String name,
@@ -111,6 +111,49 @@ public class AccountTable extends Model{
 		}
 		
 		return Integer.valueOf(uri.getLastPathSegment());
+		
+	}
+	
+	/**
+	* Updates Account(s)
+	* @param id
+	* @param name
+	* @return number of rows affected, or -1 if Account already exists
+	*/
+	public static int update(
+			Long id,
+			String name,
+			int number,
+			String description,
+			double init_balance,
+			double credit_limit,
+			double monthly_payment,
+			long due_date,
+			long account_category_id
+			){
+		
+		// convert amount to integer before storing it in database
+		init_balance = init_balance*100;
+		credit_limit = credit_limit*100;
+		monthly_payment = monthly_payment*100;
+		
+		ContentValues args = new ContentValues();
+		args.put(COLUMN_NAME, name);
+		args.put(COLUMN_NUMBER, number);
+		args.put(COLUMN_DESCRIPTION, description);
+		args.put(COLUMN_INIT_BALANCE, (int)init_balance);
+		args.put(COLUMN_CREDIT_LIMIT, (int)credit_limit);
+		args.put(COLUMN_MONTHLY_PAYMENT, (int)monthly_payment);
+		args.put(COLUMN_DUE_DATE, due_date);
+		args.put(COLUMN_ACCOUNT_CATEGORY_ID, account_category_id);
+		Uri uri;
+		try{
+			return cr().update(CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build(),
+			          args, null, null);
+		}
+		catch (SQLiteConstraintException e){
+			return -1;
+		}
 		
 	}
 	

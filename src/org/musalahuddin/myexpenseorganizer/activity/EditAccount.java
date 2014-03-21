@@ -11,6 +11,7 @@ import org.musalahuddin.myexpenseorganizer.camera.CameraModule;
 import org.musalahuddin.myexpenseorganizer.camera.CameraModule.CameraResultCallback;
 import org.musalahuddin.myexpenseorganizer.camera.CameraModule.ClearImageCallback;
 import org.musalahuddin.myexpenseorganizer.database.AccountTable;
+import org.musalahuddin.myexpenseorganizer.dialog.MultipleChoiceDialog;
 import org.musalahuddin.myexpenseorganizer.util.Utils;
 
 import android.text.TextUtils;
@@ -35,12 +36,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
-public class EditAccount extends FragmentActivity implements View.OnClickListener{
+public class EditAccount extends FragmentActivity implements View.OnClickListener,MultipleChoiceDialog.MultipleChoiceDialogListener{
 	
 	private static final int SELECT_CATEGORY_REQUEST = 1;
 	private static final int SELECT_FIELD_REQUEST = 2;
 	
-	private long accountId = 0L;
+	private long mAccountId = 0L;
 	
 	private Long mAccountCatId = 0L;
 	private long mAccountDueDate = 0L;
@@ -157,10 +158,20 @@ public class EditAccount extends FragmentActivity implements View.OnClickListene
 	private void populateFields(){
 		
 		Bundle extras = getIntent().getExtras();
-		long accountId = extras != null ? extras.getLong(AccountTable.COLUMN_ID):0L;
+		mAccountId = extras != null ? extras.getLong(AccountTable.COLUMN_ID):0L;
 		DecimalFormat f = new DecimalFormat("0.00");
-		if(accountId != 0L){
+		
+		if(mAccountId != 0L){
 			TableRow row;
+			
+			//get account Category Id
+			mAccountCatId = extras.getLong(AccountTable.COLUMN_ACCOUNT_CATEGORY_ID);
+			
+			//get due date
+			mAccountDueDate = extras.getLong(AccountTable.COLUMN_DUE_DATE);
+			mCalendar.setTimeInMillis(mAccountDueDate);
+			mAccountDueButton.setText(mTitleDateFormat.format(mCalendar.getTime()));
+			
 			//make all fields visible if populating the fields
 			for(Field field: fields){
 				row = (TableRow) findViewById(field.getFieldId());
@@ -325,10 +336,7 @@ public class EditAccount extends FragmentActivity implements View.OnClickListene
 		String pay = mAccountPayText.getText().toString();
 		long catId  = mAccountCatId;
 		
-		if(catId == 0L){
-			Toast.makeText(this, "Please select account category", Toast.LENGTH_LONG).show();
-			return false;
-		}
+	
 		//if(name.equals("")){
 		if(TextUtils.isEmpty(name.trim())){
 			Toast.makeText(this, "Please enter account name", Toast.LENGTH_LONG).show();
@@ -336,6 +344,11 @@ public class EditAccount extends FragmentActivity implements View.OnClickListene
 		}
 		if(balance.equals(".") || limit.equals(".") || pay.equals(".")){
 			Toast.makeText(this, "Invalid number entered", Toast.LENGTH_LONG).show();
+			return false;
+		}
+		
+		if(catId == 0L){
+			Toast.makeText(this, "Please select account category", Toast.LENGTH_LONG).show();
 			return false;
 		}
 		
@@ -359,7 +372,12 @@ public class EditAccount extends FragmentActivity implements View.OnClickListene
 		Log.i("credit limit is ",String.valueOf(limit));
 		Log.i("due date is ",String.valueOf(due));
 		
-		success = AccountTable.create(name, number, description, balance, limit, pay, due, catId) != -1;
+		if(mAccountId != 0L){
+			success = AccountTable.update(mAccountId, name, number, description, balance, limit, pay, due, catId) != -1;
+		}
+		else{
+			success = AccountTable.create(name, number, description, balance, limit, pay, due, catId) != -1;
+		}
 		
 		if(!success){
 			Toast.makeText(this, "error", Toast.LENGTH_LONG).show();
@@ -369,7 +387,7 @@ public class EditAccount extends FragmentActivity implements View.OnClickListene
 		
 	}
 	
-	protected Double parseDouble(String str){
+	protected double parseDouble(String str){
 		double number; 
 		try{
 			number =  Double.parseDouble(str);
@@ -379,7 +397,7 @@ public class EditAccount extends FragmentActivity implements View.OnClickListene
 		return number;
 	}
 	
-	protected Integer parseInt(String str){
+	protected int parseInt(String str){
 		int number; 
 		try{
 			number =  Integer.parseInt(str);
@@ -389,7 +407,7 @@ public class EditAccount extends FragmentActivity implements View.OnClickListene
 		return number;
 	}
 	
-	protected Long parseLong(String str){
+	protected long parseLong(String str){
 		long number; 
 		try{
 			number =  Long.parseLong(str);
@@ -440,11 +458,17 @@ public class EditAccount extends FragmentActivity implements View.OnClickListene
 		*/
 		
 		Bundle b = new Bundle();
+		b.putString("title", "Add another field");
 		b.putStringArray("fieldLabels",fieldLabels);
+		
+		/*
 		Intent i = new Intent(this,AddField.class);
 		i.putExtras(b);
 	    //startActivity(i);
 	    startActivityForResult(i,SELECT_FIELD_REQUEST);
+	    */
+	    
+	    MultipleChoiceDialog.newInstance(b).show(getSupportFragmentManager(), "ADD_FIELD");
 		
 	}
 	
@@ -480,6 +504,18 @@ public class EditAccount extends FragmentActivity implements View.OnClickListene
 			row = (TableRow) findViewById(R.id.row_add_field);
 			row.setVisibility(View.GONE);
 		}
+	}
+
+	@Override
+	public void multipleChoicePositiveClick(Bundle args) {
+		Bundle b = args;
+		displayFields(b);
+		checkFields();
+	}
+
+	@Override
+	public void multipleChoiceNegativeClick() {
+		
 	}
 	
 

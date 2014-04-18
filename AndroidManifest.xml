@@ -8,6 +8,9 @@
         android:minSdkVersion="11"
         android:targetSdkVersion="17" />
 
+    <!-- Accessing camera hardware -->
+    <uses-feature android:name="android.hardware.camera" />
+    
     <supports-screens
       android:smallScreens="true"
       android:normalScreens="true"
@@ -29,12 +32,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.SelectTransaction"/>
         <activity android:name=".activity.Preference"/>
         <activity android:name=".activity.EditAccount"
             android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize">
             <intent-filter>  
 				<action android:name="myexpenseorganizer.intent.add.accounts"/>
 				<action android:name="myexpenseorganizer.intent.adit.accounts"/>   
+              	<category android:name="android.intent.category.DEFAULT" />
+          	</intent-filter>
+        </activity>
+        <activity android:name=".activity.EditTransaction"
+            android:configChanges="keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize">
+            <intent-filter>  
+				<action android:name="myexpenseorganizer.intent.add.transactions"/>
+				<action android:name="myexpenseorganizer.intent.adit.transactions"/>   
               	<category android:name="android.intent.category.DEFAULT" />
           	</intent-filter>
         </activity>

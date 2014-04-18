@@ -287,7 +287,14 @@ public class SelectAccount extends FragmentActivity implements LoaderManager.Loa
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		TextView accountName = (TextView) view.findViewById(R.id.account_name);
 		String name = accountName.getText().toString();
-		Toast.makeText(SelectAccount.this, "You have chosen: " + " " + name , Toast.LENGTH_SHORT).show();
+		
+		Bundle b = new Bundle();
+		b.putString("title",name);
+		Intent i = new Intent(this,SelectTransaction.class);
+		i.putExtras(b);
+		startActivity(i);
+		
+		//Toast.makeText(SelectAccount.this, "You have chosen: " + " " + name , Toast.LENGTH_SHORT).show();
 	}
 	
 	//public void editAccount(View view, Long accountId){

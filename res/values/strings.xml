@@ -69,5 +69,7 @@
     <string name="alert_dialog_ok">OK</string>
     <string name="alert_dialog_cancel">Cancel</string>
     <string name="menu_edit_account">Edit/View Account</string>
+    <string name="transaction_new_title">New transaction</string>
+    <string name="transaction_edit_title">Edit transaction</string>
 
 </resources>

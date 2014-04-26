@@ -27,12 +27,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.ExpandableListContextMenuInfo;
+import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.SimpleCursorTreeAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class SelectCategory extends FragmentActivity implements LoaderManager.LoaderCallbacks<Cursor>,EditTextDialogListener {
+public class SelectCategory extends FragmentActivity implements LoaderManager.LoaderCallbacks<Cursor>,EditTextDialogListener,OnChildClickListener, OnGroupClickListener {
 
 	private LoaderManager mManager;
 	private MyExpandableListAdapter mAdapter;
@@ -54,6 +56,8 @@ public class SelectCategory extends FragmentActivity implements LoaderManager.Lo
      * there are mapped transactions or subcategories
      */
     private static final int DELETE_CAT = Menu.FIRST+4;
+    
+    boolean mManageOnly;
 	
 	public class MyExpandableListAdapter extends SimpleCursorTreeAdapter{
 
@@ -107,8 +111,11 @@ public class SelectCategory extends FragmentActivity implements LoaderManager.Lo
 			Log.i("SelectCategory", "onCreate init");
 		}
 		setContentView(R.layout.categories_list2);
+		Intent intent = getIntent();
+		String action = intent.getAction();
+        mManageOnly = action != null && action.equals("myexpenseorganizer.intent.manage.expensecategories");
 	
-		setTitle(R.string.pref_manage_expense_categories_title);
+		setTitle(mManageOnly ? R.string.pref_manage_expense_categories_title : R.string.select_expense_category);
 		
 		ExpandableListView lv = (ExpandableListView) findViewById(R.id.list);
 		
@@ -126,6 +133,7 @@ public class SelectCategory extends FragmentActivity implements LoaderManager.Lo
 	    		new int[] {android.R.id.text1});
 	    lv.setAdapter(mAdapter);
 	    lv.setEmptyView(findViewById(R.id.empty));
+	    lv.setOnChildClickListener(this);
 	    registerForContextMenu(lv);
 		
 	    
@@ -358,6 +366,42 @@ public class SelectCategory extends FragmentActivity implements LoaderManager.Lo
 	    	Toast.makeText(SelectCategory.this,"Category already exists", Toast.LENGTH_LONG).show();
 	    }
 	
+	}
+
+
+	@Override
+	public boolean onGroupClick(ExpandableListView parent, View v,
+			int groupPosition, long id) {
+		
+		return true;
+	}
+
+
+	@Override
+	public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
+			int childPosition, long id) {
+		//(CharSequence) mAdapter.getGroup(groupPosition)
+		
+		if (mManageOnly)
+		     return false;
+		
+		//group information
+		View groupView = mAdapter.getGroupView(groupPosition, true, null, parent);
+		String groupName = ((TextView) groupView).getText().toString();
+		
+		//child information
+		String childName = ((TextView) v).getText().toString();
+		
+		//Toast.makeText(SelectCategory.this,"hello " + String.valueOf(mAdapter.getGroupId(groupPosition)), Toast.LENGTH_LONG).show();
+		//Toast.makeText(SelectCategory.this,"hello " + groupName, Toast.LENGTH_LONG).show();
+		
+		Intent intent=new Intent();
+		intent.putExtra("exp_cat_id",id);
+		intent.putExtra("exp_cat_name", groupName+" : "+childName);
+		setResult(RESULT_OK,intent);
+		finish();
+		
+		return true;
 	}
 	
 }

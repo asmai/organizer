@@ -71,5 +71,7 @@
     <string name="menu_edit_account">Edit/View Account</string>
     <string name="transaction_new_title">New transaction</string>
     <string name="transaction_edit_title">Edit transaction</string>
+    <string name="select_transaction_category">Select transaction category</string>
+    <string name="select_expense_category">Select expense category</string>
 
 </resources>

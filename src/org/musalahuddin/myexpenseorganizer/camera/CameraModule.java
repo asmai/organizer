@@ -11,8 +11,6 @@ import java.util.Locale;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.LoaderManager;
-//import android.app.LoaderManager.LoaderCallbacks;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -20,14 +18,14 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
-public class CameraModule {
+public class CameraModule extends FragmentActivity{
 
 	protected static final int REQUEST_CODE_CAMERA = 100;
     protected static final int REQUEST_CODE_PICTURE = 200;
@@ -81,7 +79,10 @@ public class CameraModule {
                     Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                     intent.setType("image/*");
                     //intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
-                    activity.startActivityForResult(intent, REQUEST_CODE_PICTURE);
+                    
+                    //activity.startActivityForResult(intent, REQUEST_CODE_PICTURE);
+                    activity.startActivityForResult(Intent.createChooser(intent,
+                            "Select from list"), REQUEST_CODE_PICTURE);
                 }
                 else{
                 	clearImageOption.clearImage();
@@ -181,14 +182,16 @@ public class CameraModule {
         	String imagePath = getRealPathFromURI(fileUri,activity);
         	
         	 // bimatp factory
- 			BitmapFactory.Options options = new BitmapFactory.Options();
+ 			//BitmapFactory.Options options = new BitmapFactory.Options();
 
  			// downsizing image as it throws OutOfMemory Exception for larger images
- 			options.inSampleSize = 8;
+ 			//options.inSampleSize = 8;
+ 			//options.inScaled = true;
  			
  			Toast.makeText(activity, imagePath, Toast.LENGTH_LONG).show();
  			
-            bitmap = BitmapFactory.decodeFile(imagePath,options);
+            //bitmap = BitmapFactory.decodeFile(imagePath,options);
+            bitmap = readScaledBitmap(imagePath);
             if(bitmap != null) {
                 activity.setResult(Activity.RESULT_OK);
                 cameraResult.handleCameraResult(bitmap);
@@ -199,17 +202,13 @@ public class CameraModule {
         return false;
     }
     
-    @SuppressWarnings("unchecked")
-	public static void getRealPathFromURI_(Activity activity) {
-    	//Bundle bundle;
-    	//bundle.putParcelable("contentUri", contentUri);
-    	activity.getLoaderManager().initLoader(0, null,(LoaderManager.LoaderCallbacks<Cursor>) activity);
-    }
     
+
+  
     public static String getRealPathFromURI(Uri contentUri, Activity activity) {
         String [] proj      = {MediaStore.Images.Media.DATA};
-        Cursor cursor       = activity.managedQuery( contentUri, proj, null, null,null);
- 
+        //Cursor cursor       = activity.managedQuery( contentUri, proj, null, null,null);
+        Cursor cursor = activity.getContentResolver().query(contentUri, proj, null, null, null);
         if (cursor == null) return null;
  
         int column_index    = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
@@ -218,5 +217,28 @@ public class CameraModule {
  
         return cursor.getString(column_index);
     }
-		
+    
+    /** Read a bitmap from the specified file, scaling if necessary
+     *  Returns null if scaling failed after several tries */
+    private static final int[] SAMPLE_SIZES = { 1, 2, 4, 6, 8, 10 };
+    private static final int MAX_DIM = 1024;
+    public static Bitmap readScaledBitmap(String file) {
+        Bitmap bitmap = null;
+        int tries = 0;
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        while((bitmap == null || (bitmap.getWidth() > MAX_DIM || bitmap.getHeight() > MAX_DIM)) && tries < SAMPLE_SIZES.length) {
+            opts.inSampleSize = SAMPLE_SIZES[tries];
+            try {
+                bitmap = BitmapFactory.decodeFile(file, opts);
+            } catch (OutOfMemoryError e) {
+                // Too big
+                Log.e("decode-bitmap", "Out of memory with sample size " + opts.inSampleSize, e);  //$NON-NLS-1$//$NON-NLS-2$
+            }
+            tries++;
+        }
+
+        return bitmap;
+    }
+
+
 }

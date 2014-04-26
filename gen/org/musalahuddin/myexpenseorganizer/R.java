@@ -190,6 +190,8 @@ public final class R {
         public static final int pref_manage_transaction_categories_title=0x7f070021;
         public static final int select=0x7f070032;
         public static final int select_account_category=0x7f070036;
+        public static final int select_expense_category=0x7f070047;
+        public static final int select_transaction_category=0x7f070046;
         public static final int test=0x7f070011;
         public static final int transaction_edit_title=0x7f070045;
         public static final int transaction_new_title=0x7f070044;

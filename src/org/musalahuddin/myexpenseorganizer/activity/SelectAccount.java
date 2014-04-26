@@ -45,12 +45,20 @@ public class SelectAccount extends FragmentActivity implements LoaderManager.Loa
      * there are mapped transactions or subcategories
      */
     private static final int DELETE_ACCOUNT = Menu.FIRST+2;
+    
+    boolean mManageOnly;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.accounts_list);
-		setTitle(R.string.account_overview_title);
+		
+		Intent intent = getIntent();
+		String action = intent.getAction();
+        mManageOnly = action != null;
+        
+		//setTitle(R.string.account_overview_title);
+		setTitle(mManageOnly ? R.string.account_overview_title : R.string.select_account_category);
 		
 		ListView lv = (ListView) findViewById(R.id.list);
 		

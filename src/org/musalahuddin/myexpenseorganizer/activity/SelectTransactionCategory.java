@@ -19,13 +19,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class SelectTransactionCategory extends FragmentActivity implements LoaderManager.LoaderCallbacks<Cursor>,EditTextDialogListener {
+public class SelectTransactionCategory extends FragmentActivity implements LoaderManager.LoaderCallbacks<Cursor>,EditTextDialogListener,AdapterView.OnItemClickListener {
 
 	private LoaderManager mManager;
 	private SimpleCursorAdapter mAdapter;
@@ -39,6 +40,8 @@ public class SelectTransactionCategory extends FragmentActivity implements Loade
      * there are mapped transactions or subcategories
      */
     private static final int DELETE_CAT = Menu.FIRST+2;
+    
+    boolean mManageOnly;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +49,12 @@ public class SelectTransactionCategory extends FragmentActivity implements Loade
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.transaction_categories_list);
+		Intent intent = getIntent();
+		String action = intent.getAction();
+        mManageOnly = action != null && action.equals("myexpenseorganizer.intent.manage.transactioncategories");
 		
 		setTitle(R.string.pref_manage_transaction_categories_title);
+		setTitle(mManageOnly ? R.string.pref_manage_transaction_categories_title : R.string.select_transaction_category);
 		
 		ListView lv = (ListView) findViewById(R.id.list);
 		
@@ -67,6 +74,7 @@ public class SelectTransactionCategory extends FragmentActivity implements Loade
 		
 		lv.setAdapter(mAdapter);
 	    lv.setEmptyView(findViewById(R.id.empty));
+	    lv.setOnItemClickListener(this);
 	    registerForContextMenu(lv);
 	}
 	
@@ -212,6 +220,19 @@ public class SelectTransactionCategory extends FragmentActivity implements Loade
       Intent i = new Intent("myexpenseorganizer.intent.import.transactioncategories");
       startActivity(i);
     }
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		if (mManageOnly)
+		     return;
+		Intent intent=new Intent();
+		String name =   ((TextView) view).getText().toString();
+		intent.putExtra("trans_cat_id",id);
+		intent.putExtra("trans_cat_name", name);
+		setResult(RESULT_OK,intent);
+		finish();
+		
+	}
 
 		
 }

@@ -34,7 +34,7 @@
 			    android:layout_alignParentTop="true"
 			    android:layout_alignParentLeft="true"/>
 		    
-			    <Button
+			    <!-- Button
 			    	android:id="@+id/in_transaction_from_account"
 			      	android:visibility="visible"
 			      	android:layout_width="match_parent" 
@@ -43,7 +43,17 @@
 			     	android:layout_toRightOf="@+id/spinner_transaction_from"
 			     	android:layout_alignParentTop="true"
 			      	android:hint="Select from accounts"
-			     	style="?android:attr/spinnerStyle" />
+			     	style="?android:attr/spinnerStyle" /-->
+			    
+			    <Spinner
+			    	android:id="@+id/in_transaction_from_account"
+			      	android:visibility="visible"
+			      	android:layout_width="match_parent" 
+			     	android:layout_height="wrap_content"
+			     	android:layout_alignBottom="@+id/spinner_transaction_from"
+			     	android:layout_toRightOf="@+id/spinner_transaction_from"
+			     	android:layout_alignParentTop="true"
+			      	android:hint="Select from accounts"/>
 			    
 			    <EditText
 			        android:id="@+id/in_transaction_from_other"
@@ -85,7 +95,7 @@
 			    android:layout_alignParentLeft="true"
 			    android:hint="some_hint"/>
 		    
-			    <Button
+			    <!-- Button
 			    	android:id="@+id/in_transaction_to_account"
 			    	android:visibility="visible" 
 			      	android:layout_width="match_parent" 
@@ -94,7 +104,17 @@
 			     	android:layout_toRightOf="@+id/spinner_transaction_to"
 			     	android:layout_alignParentTop="true"
 			      	android:hint="Select from accounts" 
-			     	style="?android:attr/spinnerStyle" />
+			     	style="?android:attr/spinnerStyle" /-->
+			    
+			    <Spinner
+			    	android:id="@+id/in_transaction_to_account"
+			    	android:visibility="visible" 
+			      	android:layout_width="match_parent" 
+			     	android:layout_height="wrap_content"
+			     	android:layout_alignBottom="@+id/spinner_transaction_to"
+			     	android:layout_toRightOf="@+id/spinner_transaction_to"
+			     	android:layout_alignParentTop="true"
+			      	android:hint="Select from accounts" />
 			    
 			    <EditText
 			        android:id="@+id/in_transaction_to_other"

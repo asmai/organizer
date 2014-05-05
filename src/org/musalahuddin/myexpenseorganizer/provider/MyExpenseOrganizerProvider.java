@@ -33,6 +33,10 @@ public class MyExpenseOrganizerProvider extends ContentProvider{
 	private static final int ACCOUNTS = 9;
 	private static final int ACCOUNTS_ID = 10;
 	private static final int VIEW_ACCOUNTS = 11;
+	private static final int TRANSACTIONS = 12;
+	private static final int TRANSACTIONS_ID = 13;
+	private static final int TRANSACTIONS_ACCOUNTS = 14;
+	private static final int TRANSACTIONS_ACCOUNTS_ID = 15;
 	
 	// Authority
 	public static final String AUTHORITY = "org.musalahuddin.myexpenseorganizer";
@@ -49,6 +53,10 @@ public class MyExpenseOrganizerProvider extends ContentProvider{
 			Uri.parse("content://" + AUTHORITY + "/accounts");
 	public static final Uri VIEW_ACCOUNTS_URI = 
 			Uri.parse("content://" + AUTHORITY + "/view_accounts");
+	public static final Uri TRANSACTIONS_URI = 
+			Uri.parse("content://" + AUTHORITY + "/transactions");
+	public static final Uri TRANSACTIONS_ACCOUNTS_URI = 
+			Uri.parse("content://" + AUTHORITY + "/transactions_accounts");
 	
 	static {
 	    URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
@@ -63,6 +71,10 @@ public class MyExpenseOrganizerProvider extends ContentProvider{
 	    URI_MATCHER.addURI(AUTHORITY, "accounts", ACCOUNTS);
 	    URI_MATCHER.addURI(AUTHORITY, "accounts/#", ACCOUNTS_ID);
 	    URI_MATCHER.addURI(AUTHORITY, "view_accounts", VIEW_ACCOUNTS);
+	    URI_MATCHER.addURI(AUTHORITY, "transactions", TRANSACTIONS);
+	    URI_MATCHER.addURI(AUTHORITY, "transactions/#", TRANSACTIONS_ID);
+	    URI_MATCHER.addURI(AUTHORITY, "transactions_accounts", TRANSACTIONS_ACCOUNTS);
+	    URI_MATCHER.addURI(AUTHORITY, "transactions_accounts/#", TRANSACTIONS_ACCOUNTS_ID);
 	}
 	
 	

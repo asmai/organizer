@@ -2,8 +2,13 @@ package org.musalahuddin.myexpenseorganizer.camera;
 
 import org.musalahuddin.myexpenseorganizer.R;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,6 +23,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
@@ -43,6 +49,63 @@ public class CameraModule extends FragmentActivity{
     
     public interface CameraResultCallback {
         public void handleCameraResult(Bitmap bitmap);
+    }
+    
+    static class MyAsyncTask extends AsyncTask<Uri, Void, Void> {
+    	
+    	Bitmap bitmap;
+    	private Activity activity;
+    	private CameraResultCallback camResult;
+    	private int requestCode;
+    	/**
+	     * @param context
+	     */
+	    public MyAsyncTask(Activity activity, int requestCode, CameraResultCallback result) {
+	    	attach(activity,requestCode,result);
+	    }
+
+		public void attach(Activity activity, int requestCode, CameraResultCallback result) {
+			this.activity=activity;
+			this.camResult=result;
+			this.requestCode=requestCode;
+			
+		}
+
+		@Override
+		protected Void doInBackground(Uri... params) {
+			String imagePath="";
+			if(requestCode == CameraModule.REQUEST_CODE_PICTURE){
+				imagePath = getRealPathFromURI(params[0],activity);
+			}
+			else if (requestCode == CameraModule.REQUEST_CODE_CAMERA){
+				imagePath = fileUri.getPath();
+			}
+        	File check = new File(imagePath).getParentFile();
+        	String dirName = check.getName();
+        	if(!dirName.equals(IMAGE_DIRECTORY_NAME)){
+        		File file2 = getOutputMediaFile(MEDIA_TYPE_IMAGE);
+        		String imagePath2 = file2.getAbsolutePath();
+        		copyFile(imagePath,imagePath2);
+        	}
+        	
+        	bitmap = readScaledBitmap(imagePath);
+            
+            
+        	
+			return null;
+			
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			if(bitmap != null) {
+                //activity.setResult(Activity.RESULT_OK);
+                camResult.handleCameraResult(bitmap);
+            }
+		}
+	
     }
     
     public static void showPictureLauncher(final Activity activity, final ClearImageCallback clearImageOption) {
@@ -76,13 +139,21 @@ public class CameraModule extends FragmentActivity{
             		activity.startActivityForResult(intent, REQUEST_CODE_CAMERA);
                 }
                 else if ((which == 1 && cameraAvailable) || (which == 0 && !cameraAvailable)) {
-                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    /*
+                	Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                     intent.setType("image/*");
                     //intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
                     
                     //activity.startActivityForResult(intent, REQUEST_CODE_PICTURE);
                     activity.startActivityForResult(Intent.createChooser(intent,
                             "Select from list"), REQUEST_CODE_PICTURE);
+                    */
+                	
+                    Intent intent = new Intent(Intent.ACTION_PICK);
+                    intent.setType("image/*");
+                    //intent.setData(Uri.fromFile(mediaStorageDir));
+                    activity.startActivityForResult(intent, REQUEST_CODE_PICTURE);
+                    
                 }
                 else{
                 	clearImageOption.clearImage();
@@ -168,7 +239,8 @@ public class CameraModule extends FragmentActivity{
  			options.inSampleSize = 8;
  			
  			Toast.makeText(activity, fileUri.getPath(), Toast.LENGTH_LONG).show();
-            bitmap = BitmapFactory.decodeFile(fileUri.getPath(),options);
+            //bitmap = BitmapFactory.decodeFile(fileUri.getPath(),options);
+            bitmap = readScaledBitmap(fileUri.getPath());
             if(bitmap != null) {
                 activity.setResult(Activity.RESULT_OK);
                 cameraResult.handleCameraResult(bitmap);
@@ -177,9 +249,28 @@ public class CameraModule extends FragmentActivity{
         } 
         else if(requestCode == CameraModule.REQUEST_CODE_PICTURE && resultCode == Activity.RESULT_OK) {
         	fileUri = data.getData();
+        	new MyAsyncTask(activity,requestCode,cameraResult).execute(fileUri);
+        	/*
         	Bitmap bitmap;
         	
         	String imagePath = getRealPathFromURI(fileUri,activity);
+        	
+        	File file2 = getOutputMediaFile(MEDIA_TYPE_IMAGE);
+        	
+        	String imagePath2 = file2.getAbsolutePath();
+        	
+        	File check = new File(imagePath).getParentFile();
+        	String dirName = check.getName();
+        	if(!dirName.equals(IMAGE_DIRECTORY_NAME)){
+        		Toast.makeText(activity, "copy it", Toast.LENGTH_LONG).show();
+        	}
+        	else{
+        		Toast.makeText(activity, "do not copy it", Toast.LENGTH_LONG).show();
+        	}
+        	*/
+        	//Toast.makeText(activity, check.getName(), Toast.LENGTH_LONG).show();
+        	
+        	//copyFile(imagePath,imagePath2);
         	
         	 // bimatp factory
  			//BitmapFactory.Options options = new BitmapFactory.Options();
@@ -188,14 +279,19 @@ public class CameraModule extends FragmentActivity{
  			//options.inSampleSize = 8;
  			//options.inScaled = true;
  			
- 			Toast.makeText(activity, imagePath, Toast.LENGTH_LONG).show();
+        	//Toast.makeText(activity, fileUri.getPath(), Toast.LENGTH_LONG).show();
+ 			//Toast.makeText(activity, imagePath, Toast.LENGTH_LONG).show();
  			
-            //bitmap = BitmapFactory.decodeFile(imagePath,options);
-            bitmap = readScaledBitmap(imagePath);
+            //bitmap = BitmapFactory.decodeFile(imagePath);
+           /*
+        	bitmap = readScaledBitmap(imagePath);
+           
             if(bitmap != null) {
                 activity.setResult(Activity.RESULT_OK);
                 cameraResult.handleCameraResult(bitmap);
             }
+            */
+        	
             return true;
         }
         
@@ -238,6 +334,26 @@ public class CameraModule extends FragmentActivity{
         }
 
         return bitmap;
+    }
+    
+    public static boolean copyFile(String from, String to) {
+        try {
+            File dir = Environment.getExternalStorageDirectory();
+            if (dir.canWrite()) {
+                File source = new File(from);
+                File destination= new File(to);
+                if (source.exists()) {
+                    FileChannel src = new FileInputStream(source).getChannel();
+                    FileChannel dst = new FileOutputStream(destination).getChannel();
+                    dst.transferFrom(src, 0, src.size());
+                    src.close();
+                    dst.close();
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 

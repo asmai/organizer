@@ -41,7 +41,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-public class EditTransaction extends FragmentActivity implements OnClickListener,OnItemSelectedListener,LoaderManager.LoaderCallbacks<Cursor>{
+public class EditTransactionOLD extends FragmentActivity implements OnClickListener,OnItemSelectedListener,LoaderManager.LoaderCallbacks<Cursor>{
 	
 	boolean mAddOnly;
 	
@@ -50,17 +50,15 @@ public class EditTransaction extends FragmentActivity implements OnClickListener
 	
 	private static final int SELECT_EXPENSE_CATEGORY_REQUEST = 1;
 	private static final int SELECT_TRANSACTON_CATEGORY_REQUEST = 2;
-	
+	private static final int SELECT_FROM_ACCOUNT_REQUEST = 3;
+	private static final int SELECT_TO_ACCOUNT_REQUEST = 4;
 	
 	static final int DIALOG_DATE = 0;
 	static final int DIALOG_TIME = 1;
 	
-	private long mTransactionDate = 0L;
-	private long mTransactionTime = 0L;
+	private long transactionDateTime = 0L;
 	private Long mExpenseCatId = 0L;
 	private Long mTransactionCatId = 0L;
-	private Long mPrimaryAccountId = 0L;
-	private Long mSecondaryAccountId = 0L;
 	private String mTransactionCatName;
 	private String mExpenseCatName;
 	
@@ -129,19 +127,92 @@ public class EditTransaction extends FragmentActivity implements OnClickListener
     		android.R.layout.simple_spinner_item, list);
     	adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     	
+    	mSpTransactionFrom.setAdapter(adapter);
+    	mSpTransactionFrom.setOnItemSelectedListener(
+    			new OnItemSelectedListener(){
+	    			public void onItemSelected(AdapterView<?> parent, View view, int position,
+	    					long id) {
+	    				if(position == 0){
+	    					mEtTransactionFromOther.setVisibility(View.GONE);
+	    					mSpTransactionFromAccount.setVisibility(View.VISIBLE);
+	    				}
+	    				else{
+	    					mSpTransactionFromAccount.setVisibility(View.GONE);
+	    					mEtTransactionFromOther.setVisibility(View.VISIBLE);
+	    					mEtTransactionFromOther.setText("");
+	    					mEtTransactionFromOther.requestFocus();
+	    				}
+	    				
+	    			}
+	
+	    			@Override
+	    			public void onNothingSelected(AdapterView<?> parent) {
+	    				// do nothing
+	    			}
+    			});
+    	
+    	mSpTransactionTo.setAdapter(adapter);
+    	mSpTransactionTo.setOnItemSelectedListener(
+    			new OnItemSelectedListener(){
+	    			public void onItemSelected(AdapterView<?> parent, View view, int position,
+	    					long id) {
+	    				if(position == 0){
+	    					mEtTransactionToOther.setVisibility(View.GONE);
+	    					mSpTransactionToAccount.setVisibility(View.VISIBLE);
+	    				}
+	    				else{
+	    					mSpTransactionToAccount.setVisibility(View.GONE);
+	    					mEtTransactionToOther.setVisibility(View.VISIBLE);
+	    					mEtTransactionToOther.setText("");
+	    					mEtTransactionToOther.requestFocus();
+	    				}
+	    				
+	    			}
+	
+	    			@Override
+	    			public void onNothingSelected(AdapterView<?> parent) {
+	    				// do nothing
+	    				
+	    			}
+    			});
+    	
     	
     	mAccountsAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, null, new String[] {AccountTable.COLUMN_NAME}, new int[] {android.R.id.text1}, 0);
     	mAccountsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     	
-    	mSpTransactionFrom.setAdapter(adapter);
-    	mSpTransactionTo.setAdapter(adapter);
     	mSpTransactionFromAccount.setAdapter(mAccountsAdapter);
-    	mSpTransactionToAccount.setAdapter(mAccountsAdapter);
+    	mSpTransactionFromAccount.setOnItemSelectedListener(
+    			new OnItemSelectedListener(){
+	    			public void onItemSelected(AdapterView<?> parent, View view, int position,
+	    					long id) {
+	    				
+	    				Toast.makeText(EditTransactionOLD.this,String.valueOf(id), Toast.LENGTH_LONG).show();
+	    			}
+	
+	    			@Override
+	    			public void onNothingSelected(AdapterView<?> parent) {
+	    				// do nothing
+	    				
+	    			}
+    			});
     	
-    	mSpTransactionFrom.setOnItemSelectedListener(this);
-    	mSpTransactionTo.setOnItemSelectedListener(this);
-    	mSpTransactionFromAccount.setOnItemSelectedListener(this);
-    	mSpTransactionToAccount.setOnItemSelectedListener(this);
+    	mSpTransactionToAccount.setAdapter(mAccountsAdapter);
+    	mSpTransactionToAccount.setOnItemSelectedListener(
+    			new OnItemSelectedListener(){
+	    			public void onItemSelected(AdapterView<?> parent, View view, int position,
+	    					long id) {
+	    				
+	    				Toast.makeText(EditTransactionOLD.this,String.valueOf(id), Toast.LENGTH_LONG).show();
+	    			}
+	
+	    			@Override
+	    			public void onNothingSelected(AdapterView<?> parent) {
+	    				// do nothing
+	    				
+	    			}
+    			});
+    	
+    	
     	mImgBtnTransactionCamera.setOnClickListener(this);
     	mBtnTransactionDate.setOnClickListener(this);
     	mBtnTransactionTime.setOnClickListener(this);
@@ -163,7 +234,7 @@ public class EditTransaction extends FragmentActivity implements OnClickListener
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		//outState.putSerializable("calendar", mCalendar);
+		outState.putSerializable("calendar", mCalendar);
 	}
 	
 	
@@ -182,8 +253,7 @@ public class EditTransaction extends FragmentActivity implements OnClickListener
 		switch (item.getItemId()) {
 		
 		case R.id.SAVE_COMMAND:
-			Toast.makeText(EditTransaction.this,"exp: " + String.valueOf(mExpenseCatId) + "tran: " + String.valueOf(mTransactionCatId), Toast.LENGTH_LONG).show();
-			//finish();
+			finish();
 			break;
 			
 		case R.id.CANCEL_COMMAND:
@@ -206,6 +276,10 @@ public class EditTransaction extends FragmentActivity implements OnClickListener
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()){
+		
+		case R.id.in_transaction_from_account:
+			startSelectAccount();
+			break;
 			
 		case R.id.image_transaction_camera:
 			
@@ -216,7 +290,7 @@ public class EditTransaction extends FragmentActivity implements OnClickListener
 			imageWidth = mImgBtnTransactionCamera.getWidth();
 			}
 			
-			Toast.makeText(EditTransaction.this,"getHeight = " + imageHeight, Toast.LENGTH_LONG).show();
+			Toast.makeText(EditTransactionOLD.this,"getHeight = " + imageHeight, Toast.LENGTH_LONG).show();
 			
 			if (pendingTransactionImage != null)
                 CameraModule.showPictureLauncher(this, clearImage);
@@ -243,6 +317,14 @@ public class EditTransaction extends FragmentActivity implements OnClickListener
 		
 	}
 	
+	
+	/**
+	 * calls the activity for selecting (and managing) expense categories
+	 */
+    private void startSelectAccount(){
+    	Intent i = new Intent(this, SelectAccount.class);
+    	startActivityForResult(i,SELECT_FROM_ACCOUNT_REQUEST);
+    }
 
 	/**
 	 * calls the activity for selecting (and managing) expense categories
@@ -290,7 +372,6 @@ public class EditTransaction extends FragmentActivity implements OnClickListener
 	 * sets date on date button
 	 */
 	private void setDate() {
-		mTransactionDate = mCalendar.getTimeInMillis();
 		mBtnTransactionDate.setText(mDateFormat.format(mCalendar.getTime()));
 	}
 	
@@ -298,7 +379,6 @@ public class EditTransaction extends FragmentActivity implements OnClickListener
 	 * sets date on date button
 	 */
 	private void setTime() {
-		mTransactionTime = mCalendar.getTimeInMillis();
 		mBtnTransactionTime.setText(mTimeFormat.format(mCalendar.getTime()));
 	}
 	
@@ -364,18 +444,14 @@ public class EditTransaction extends FragmentActivity implements OnClickListener
 			CameraResultCallback callback = new CameraResultCallback() {
 	            @Override
 	            public void handleCameraResult(Bitmap bitmap) {
-	            	Log.i("i am here","sir1");
 	            	//Toast.makeText(EditTransaction.this,"getHeigth = " + mImgBtnTransactionCamera.getHeight(), Toast.LENGTH_LONG).show();
 	            	//Toast.makeText(EditTransaction.this,"getHeigth = " + EditTransaction.imageHeight, Toast.LENGTH_LONG).show();
-	            	
 	            	pendingTransactionImage = bitmap;
-	            
 	            	mImgBtnTransactionCamera.setMaxHeight(imageHeight);
 	                mImgBtnTransactionCamera.setMaxWidth(imageWidth);
 	                //mImgBtnTransactionCamera.setMaxHeight(150);
 	                //mImgBtnTransactionCamera.setMaxWidth(150);
 	            	mImgBtnTransactionCamera.setImageBitmap(pendingTransactionImage);
-	               
 	                
 	            }
 	        };
@@ -423,52 +499,16 @@ public class EditTransaction extends FragmentActivity implements OnClickListener
 	}
 
 	@Override
-	public void onItemSelected(AdapterView<?> parent, View view, int position,
-			long id) {
-		switch(parent.getId()) {
+	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
+			long arg3) {
 		
-		case R.id.spinner_transaction_from:
-			if(position == 0){
-				mEtTransactionFromOther.setVisibility(View.GONE);
-				mSpTransactionFromAccount.setVisibility(View.VISIBLE);
-			}
-			else{
-				mSpTransactionFromAccount.setVisibility(View.GONE);
-				mEtTransactionFromOther.setVisibility(View.VISIBLE);
-				mEtTransactionFromOther.setText("");
-				mEtTransactionFromOther.requestFocus();
-			}
-			break;
-			
-		case R.id.spinner_transaction_to:
-			if(position == 0){
-				mEtTransactionToOther.setVisibility(View.GONE);
-				mSpTransactionToAccount.setVisibility(View.VISIBLE);
-			}
-			else{
-				mSpTransactionToAccount.setVisibility(View.GONE);
-				mEtTransactionToOther.setVisibility(View.VISIBLE);
-				mEtTransactionToOther.setText("");
-				mEtTransactionToOther.requestFocus();
-			}
-			break;
-			
-		case R.id.in_transaction_from_account:
-			//Toast.makeText(EditTransaction.this,String.valueOf(id), Toast.LENGTH_LONG).show();
-			mPrimaryAccountId = id;
-			break;
-			
-		case R.id.in_transaction_to_account:
-			//Toast.makeText(EditTransaction.this,String.valueOf(id), Toast.LENGTH_LONG).show();
-			mSecondaryAccountId = id;
-			break;
-		}
 		
 	}
 
 	@Override
-	public void onNothingSelected(AdapterView<?> parent) {
-		// do nothing
+	public void onNothingSelected(AdapterView<?> arg0) {
+		
+		
 	}
 
 

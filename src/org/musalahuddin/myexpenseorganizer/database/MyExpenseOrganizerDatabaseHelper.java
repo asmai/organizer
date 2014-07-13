@@ -8,7 +8,7 @@ import android.util.Log;
 public class MyExpenseOrganizerDatabaseHelper extends SQLiteOpenHelper {
 
 	private static final String DATABASE_NAME = "myexpenseorganizer.db";
-	private static final int DATABASE_VERSION = 39;
+	private static final int DATABASE_VERSION = 59;
 	
 	public MyExpenseOrganizerDatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -33,6 +33,7 @@ public class MyExpenseOrganizerDatabaseHelper extends SQLiteOpenHelper {
 		AccountView.onCreate(db);
 		TransactionTable.onCreate(db);
 		TransactionAccountTable.onCreate(db);
+		TransactionView.onCreate(db);
 	}
 
 	@Override
@@ -46,6 +47,7 @@ public class MyExpenseOrganizerDatabaseHelper extends SQLiteOpenHelper {
 		AccountView.onUpgrade(db, oldVersion, newVersion);
 		TransactionTable.onUpgrade(db, oldVersion, newVersion);
 		TransactionAccountTable.onUpgrade(db, oldVersion, newVersion);
+		TransactionView.onUpgrade(db, oldVersion, newVersion);
 		
 	}
 	

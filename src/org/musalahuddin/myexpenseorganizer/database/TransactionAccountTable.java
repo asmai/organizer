@@ -18,6 +18,8 @@ public class TransactionAccountTable extends Model{
 	public static final String COLUMN_TRANSACTION_ID = "transaction_id";
 	public static final String COLUMN_PRIMARY_ACCOUNT_ID = "primary_account_id";
 	public static final String COLUMN_SECONDARY_ACCOUNT_ID = "secondary_account_id";
+	public static final String COLUMN_PRIMARY_ACCOUNT_DESCRIPTION = "primary_account_description";
+	public static final String COLUMN_SECONDARY_ACCOUNT_DESCRIPTION = "secondary_account_description";
 	public static final String COLUMN_AMOUNT = "amount";
 	public static final String COLUMN_IS_DEPOSIT = "is_deposit";
 	
@@ -30,6 +32,8 @@ public class TransactionAccountTable extends Model{
 	+ COLUMN_TRANSACTION_ID + " INTEGER NOT NULL, " 
 	+ COLUMN_PRIMARY_ACCOUNT_ID + " INTEGER NOT NULL, "
 	+ COLUMN_SECONDARY_ACCOUNT_ID + " INTEGER NOT NULL, "
+	+ COLUMN_PRIMARY_ACCOUNT_DESCRIPTION + " TEXT, "
+	+ COLUMN_SECONDARY_ACCOUNT_DESCRIPTION + " TEXT, "
 	+ COLUMN_AMOUNT + " INTEGER, "
 	+ COLUMN_IS_DEPOSIT + " INTEGER, "
 	+ "FOREIGN KEY(" + COLUMN_TRANSACTION_ID + ") REFERENCES "+TransactionTable.TABLE_TRANSACTION+"("+TransactionTable.COLUMN_ID+"), "
@@ -48,5 +52,44 @@ public class TransactionAccountTable extends Model{
 				+ ", which will destroy all old data");
 		database.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSACTION_ACCOUNT);
 		onCreate(database);
+	}
+	
+	/**
+	 * Creates a new Transaction
+	 * @param name
+	 * @return the row id of the newly inserted row, of -1 if Transaction already exists
+	 */
+	public static long create(
+			long transaction_id,
+			long primary_account_id,
+			long secondary_account_id,
+			String primary_account_description,
+			String secondary_account_description,
+			double amount,
+			int is_deposit
+			)
+	{
+		
+		amount = amount*100;
+		
+		ContentValues initialValues = new ContentValues();
+		initialValues.put(COLUMN_TRANSACTION_ID, transaction_id);
+		initialValues.put(COLUMN_PRIMARY_ACCOUNT_ID, primary_account_id);
+		initialValues.put(COLUMN_SECONDARY_ACCOUNT_ID, secondary_account_id);
+		initialValues.put(COLUMN_PRIMARY_ACCOUNT_DESCRIPTION, primary_account_description);
+		initialValues.put(COLUMN_SECONDARY_ACCOUNT_DESCRIPTION, secondary_account_description);
+		initialValues.put(COLUMN_AMOUNT, amount);
+		initialValues.put(COLUMN_IS_DEPOSIT, is_deposit);
+		
+		Uri uri;
+		try{
+			uri = cr().insert(CONTENT_URI,initialValues);
+		}
+		catch (SQLiteConstraintException e){
+			return -1;
+		}
+		
+		return Integer.valueOf(uri.getLastPathSegment());
+		
 	}
 }

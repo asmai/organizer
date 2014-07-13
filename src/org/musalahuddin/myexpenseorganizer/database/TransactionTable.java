@@ -16,7 +16,7 @@ public class TransactionTable extends Model{
 	public static final String TABLE_TRANSACTION = "transactions";
 	public static final String COLUMN_ID = "_id";
 	public static final String COLUMN_TRANSACTION_CATEGORY_ID = "transaction_category_id";
-	public static final String COLUMN_EXPENSE_CATEGORY_ID = "account_category_name";
+	public static final String COLUMN_EXPENSE_CATEGORY_ID = "expense_category_id";
 	public static final String COLUMN_DESCRIPTION = "description";
 	public static final String COLUMN_NOTES = "notes";
 	public static final String COLUMN_IMAGE_PATH = "image_path";
@@ -55,5 +55,41 @@ public class TransactionTable extends Model{
 				+ ", which will destroy all old data");
 		database.execSQL("DROP TABLE IF EXISTS " + TABLE_TRANSACTION);
 		onCreate(database);
+	}
+	
+	/**
+	 * Creates a new Transaction Account
+	 * @param name
+	 * @return the row id of the newly inserted row, or -1 if something goes wrong
+	 */
+	public static long create(
+			long transaction_category_id,
+			long expense_category_id,
+			String description,
+			String notes,
+			String image_path,
+			long transaction_date
+			)
+	{
+		
+		
+		ContentValues initialValues = new ContentValues();
+		initialValues.put(COLUMN_TRANSACTION_CATEGORY_ID, transaction_category_id);
+		initialValues.put(COLUMN_EXPENSE_CATEGORY_ID, expense_category_id);
+		initialValues.put(COLUMN_DESCRIPTION, description);
+		initialValues.put(COLUMN_NOTES, notes);
+		initialValues.put(COLUMN_IMAGE_PATH, image_path);
+		initialValues.put(COLUMN_TRANSACTION_DATE, transaction_date);
+		
+		Uri uri;
+		try{
+			uri = cr().insert(CONTENT_URI,initialValues);
+		}
+		catch (SQLiteConstraintException e){
+			return -1;
+		}
+		
+		return Integer.valueOf(uri.getLastPathSegment());
+		
 	}
 }

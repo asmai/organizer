@@ -76,12 +76,15 @@ public class CameraModule extends FragmentActivity{
 			String imagePath="";
 			if(requestCode == CameraModule.REQUEST_CODE_PICTURE){
 				imagePath = getRealPathFromURI(params[0],activity);
+				Log.i("requestCode:"," picture");
 			}
 			else if (requestCode == CameraModule.REQUEST_CODE_CAMERA){
 				imagePath = fileUri.getPath();
+				Log.i("requestCode:"," camera");
 			}
         	File check = new File(imagePath).getParentFile();
         	String dirName = check.getName();
+        	Log.i("dirName",dirName);
         	if(!dirName.equals(IMAGE_DIRECTORY_NAME)){
         		File file2 = getOutputMediaFile(MEDIA_TYPE_IMAGE);
         		String imagePath2 = file2.getAbsolutePath();
@@ -90,8 +93,6 @@ public class CameraModule extends FragmentActivity{
         	
         	bitmap = readScaledBitmap(imagePath);
             
-            
-        	
 			return null;
 			
 		}
@@ -139,15 +140,7 @@ public class CameraModule extends FragmentActivity{
             		activity.startActivityForResult(intent, REQUEST_CODE_CAMERA);
                 }
                 else if ((which == 1 && cameraAvailable) || (which == 0 && !cameraAvailable)) {
-                    /*
-                	Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                    intent.setType("image/*");
-                    //intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
                     
-                    //activity.startActivityForResult(intent, REQUEST_CODE_PICTURE);
-                    activity.startActivityForResult(Intent.createChooser(intent,
-                            "Select from list"), REQUEST_CODE_PICTURE);
-                    */
                 	
                     Intent intent = new Intent(Intent.ACTION_PICK);
                     intent.setType("image/*");
@@ -230,68 +223,15 @@ public class CameraModule extends FragmentActivity{
     public static boolean activityResult(Activity activity, int requestCode, int resultCode, Intent data,
             CameraResultCallback cameraResult) {
         if(requestCode == CameraModule.REQUEST_CODE_CAMERA && resultCode == Activity.RESULT_OK) {
-            Bitmap bitmap;
-           
-            // bimatp factory
- 			BitmapFactory.Options options = new BitmapFactory.Options();
-
- 			// downsizing image as it throws OutOfMemory Exception for larger images
- 			options.inSampleSize = 8;
- 			
- 			Toast.makeText(activity, fileUri.getPath(), Toast.LENGTH_LONG).show();
-            //bitmap = BitmapFactory.decodeFile(fileUri.getPath(),options);
-            bitmap = readScaledBitmap(fileUri.getPath());
-            if(bitmap != null) {
-                activity.setResult(Activity.RESULT_OK);
-                cameraResult.handleCameraResult(bitmap);
-            }
+            
+        	new MyAsyncTask(activity,requestCode,cameraResult).execute(fileUri);
+        	
             return true;
         } 
         else if(requestCode == CameraModule.REQUEST_CODE_PICTURE && resultCode == Activity.RESULT_OK) {
-        	fileUri = data.getData();
-        	new MyAsyncTask(activity,requestCode,cameraResult).execute(fileUri);
-        	/*
-        	Bitmap bitmap;
         	
-        	String imagePath = getRealPathFromURI(fileUri,activity);
-        	
-        	File file2 = getOutputMediaFile(MEDIA_TYPE_IMAGE);
-        	
-        	String imagePath2 = file2.getAbsolutePath();
-        	
-        	File check = new File(imagePath).getParentFile();
-        	String dirName = check.getName();
-        	if(!dirName.equals(IMAGE_DIRECTORY_NAME)){
-        		Toast.makeText(activity, "copy it", Toast.LENGTH_LONG).show();
-        	}
-        	else{
-        		Toast.makeText(activity, "do not copy it", Toast.LENGTH_LONG).show();
-        	}
-        	*/
-        	//Toast.makeText(activity, check.getName(), Toast.LENGTH_LONG).show();
-        	
-        	//copyFile(imagePath,imagePath2);
-        	
-        	 // bimatp factory
- 			//BitmapFactory.Options options = new BitmapFactory.Options();
-
- 			// downsizing image as it throws OutOfMemory Exception for larger images
- 			//options.inSampleSize = 8;
- 			//options.inScaled = true;
- 			
-        	//Toast.makeText(activity, fileUri.getPath(), Toast.LENGTH_LONG).show();
- 			//Toast.makeText(activity, imagePath, Toast.LENGTH_LONG).show();
- 			
-            //bitmap = BitmapFactory.decodeFile(imagePath);
-           /*
-        	bitmap = readScaledBitmap(imagePath);
-           
-            if(bitmap != null) {
-                activity.setResult(Activity.RESULT_OK);
-                cameraResult.handleCameraResult(bitmap);
-            }
-            */
-        	
+        	new MyAsyncTask(activity,requestCode,cameraResult).execute(data.getData());
+    
             return true;
         }
         

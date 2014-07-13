@@ -154,16 +154,16 @@
 		    
 		</LinearLayout>
 		
-		<!-- Description -->
+		<!-- Notes -->
 		<LinearLayout
-		    android:id="@+id/row_transaction_description" 
+		    android:id="@+id/row_transaction_notes" 
     		android:visibility="visible"
 			android:orientation="vertical"
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content">
 			
 		    <TextView
-		        android:id="@+id/label_transaction_description"
+		        android:id="@+id/label_transaction_notes"
 		        android:text="Description"
 			    android:layout_width="fill_parent"
 			    android:layout_height="wrap_content" />
@@ -185,8 +185,8 @@
 		    	android:src="@drawable/camera_button"/>
 			    
 			    <EditText
-	            android:id="@+id/in_transaction_description"
-	            android:hint="Description"  
+	            android:id="@+id/in_transaction_notes"
+	            android:hint="Notes"  
 	            android:layout_width="match_parent" 
 	            android:layout_height="wrap_content"
 	            android:layout_centerVertical="true"

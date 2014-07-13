@@ -8,6 +8,7 @@ import org.musalahuddin.myexpenseorganizer.MyApplication;
 import org.musalahuddin.myexpenseorganizer.R;
 import org.musalahuddin.myexpenseorganizer.database.AccountTable;
 import org.musalahuddin.myexpenseorganizer.database.AccountView;
+import org.musalahuddin.myexpenseorganizer.database.TransactionView;
 
 
 import android.app.LoaderManager;
@@ -298,6 +299,7 @@ public class SelectAccount extends FragmentActivity implements LoaderManager.Loa
 		
 		Bundle b = new Bundle();
 		b.putString("title",name);
+		b.putLong("accountId", id);
 		Intent i = new Intent(this,SelectTransaction.class);
 		i.putExtras(b);
 		startActivity(i);

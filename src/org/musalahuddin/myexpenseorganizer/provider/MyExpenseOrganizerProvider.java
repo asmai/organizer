@@ -37,6 +37,7 @@ public class MyExpenseOrganizerProvider extends ContentProvider{
 	private static final int TRANSACTIONS_ID = 13;
 	private static final int TRANSACTIONS_ACCOUNTS = 14;
 	private static final int TRANSACTIONS_ACCOUNTS_ID = 15;
+	private static final int VIEW_TRANSACTIONS = 16;
 	
 	// Authority
 	public static final String AUTHORITY = "org.musalahuddin.myexpenseorganizer";
@@ -57,6 +58,8 @@ public class MyExpenseOrganizerProvider extends ContentProvider{
 			Uri.parse("content://" + AUTHORITY + "/transactions");
 	public static final Uri TRANSACTIONS_ACCOUNTS_URI = 
 			Uri.parse("content://" + AUTHORITY + "/transactions_accounts");
+	public static final Uri VIEW_TRANSACTIONS_URI = 
+			Uri.parse("content://" + AUTHORITY + "/view_transactions");
 	
 	static {
 	    URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
@@ -75,6 +78,7 @@ public class MyExpenseOrganizerProvider extends ContentProvider{
 	    URI_MATCHER.addURI(AUTHORITY, "transactions/#", TRANSACTIONS_ID);
 	    URI_MATCHER.addURI(AUTHORITY, "transactions_accounts", TRANSACTIONS_ACCOUNTS);
 	    URI_MATCHER.addURI(AUTHORITY, "transactions_accounts/#", TRANSACTIONS_ACCOUNTS_ID);
+	    URI_MATCHER.addURI(AUTHORITY, "view_transactions", VIEW_TRANSACTIONS);
 	}
 	
 	
@@ -127,6 +131,9 @@ public class MyExpenseOrganizerProvider extends ContentProvider{
 			
 		case ACCOUNT_CATEGORIES:
 			qb.setTables(AccountCategoryTable.TABLE_ACCOUNT_CATEGORY);
+			// example of AND
+			//qb.appendWhere(AccountCategoryTable.COLUMN_ID + "!=1 AND " + AccountCategoryTable.COLUMN_ID + "=2");
+			qb.appendWhere(AccountCategoryTable.COLUMN_ID + "!=1");
 			break;
 		
 		case ACCOUNT_CATEGORIES_ID:
@@ -145,10 +152,16 @@ public class MyExpenseOrganizerProvider extends ContentProvider{
 			
 		case ACCOUNTS:
 			qb.setTables(AccountTable.TABLE_ACCOUNT);
+			qb.appendWhere(AccountTable.COLUMN_ID + "!=1");
 			break;
 			
 		case VIEW_ACCOUNTS:
 			qb.setTables(AccountView.VIEW_ACCOUNT);
+			qb.appendWhere(AccountTable.COLUMN_ID + "!=1");
+			break;
+			
+		case VIEW_TRANSACTIONS:
+			qb.setTables(TransactionView.VIEW_TRANSACTION);
 			break;
 			
 		default:
@@ -300,6 +313,20 @@ public class MyExpenseOrganizerProvider extends ContentProvider{
 			//notify the accounts view uri
 			getContext().getContentResolver().notifyChange(VIEW_ACCOUNTS_URI, null);
 			newUri = ACCOUNTS + "/" + id;
+			break;
+			
+		case TRANSACTIONS:
+			id = db.insertOrThrow(TransactionTable.TABLE_TRANSACTION, null, values);
+			//notify the accounts view uri
+			//getContext().getContentResolver().notifyChange(TRANSACTIONS_URI, null);
+			newUri = TRANSACTIONS + "/" + id;
+			break;
+			
+		case TRANSACTIONS_ACCOUNTS:
+			id = db.insertOrThrow(TransactionAccountTable.TABLE_TRANSACTION_ACCOUNT, null, values);
+			//notify the accounts view uri
+			getContext().getContentResolver().notifyChange(VIEW_TRANSACTIONS_URI, null);
+			newUri = TRANSACTIONS_ACCOUNTS + "/" + id;
 			break;
 			
 		 default:

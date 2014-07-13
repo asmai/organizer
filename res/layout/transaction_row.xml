@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal">
+  <TableLayout
+      android:layout_height="wrap_content"
+      android:layout_width="0dp"
+      android:layout_weight="1"
+      android:stretchColumns="1"
+      android:shrinkColumns="1">
+		  
+		  <TableRow
+		      android:id="@+id/row_transaction_category" >
+			    <TextView
+            		android:text="Category" />
+			    <TextView 
+			        android:text="" 
+			        android:id="@+id/transaction_category"
+			        android:gravity="right"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_span="2" />
+		  </TableRow>
+		  <TableRow
+		      android:id="@+id/row_transaction_account" >
+			    <TextView
+            		android:text="Description" />
+			    <TextView 
+			        android:text="" 
+			        android:id="@+id/transaction_account"
+			        android:gravity="right"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content" />
+		  </TableRow>
+		  <TableRow
+		      android:id="@+id/row_transaction_type" >
+			    <TextView
+            		android:text="Type" />
+			    <TextView 
+			        android:text="" 
+			        android:id="@+id/transaction_type"
+			        android:gravity="right"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_span="2" />
+		  </TableRow>
+		  <TableRow
+		      android:id="@+id/row_transaction_amount" >
+			    <TextView
+            		android:text="Amount" />
+			    <TextView 
+			        android:text="" 
+			        android:id="@+id/transaction_amount"
+			        android:gravity="right"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content" />
+		  </TableRow>
+		  <TableRow
+		      android:id="@+id/row_transaction_date" >
+			    <TextView
+            		android:text="Date" />
+			    <TextView 
+			        android:text="" 
+			        android:id="@+id/transaction_date"
+			        android:gravity="right"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content" />
+		  </TableRow>
+  </TableLayout>
+</LinearLayout>

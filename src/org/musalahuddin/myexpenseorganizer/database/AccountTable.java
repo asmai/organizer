@@ -47,9 +47,14 @@ public class AccountTable extends Model{
 			+ COLUMN_DELETED + " INTERGER DEFAULT 0 NOT NULL, "
 			+ "FOREIGN KEY(" + COLUMN_ACCOUNT_CATEGORY_ID + ") REFERENCES "+AccountCategoryTable.TABLE_ACCOUNT_CATEGORY+"("+AccountCategoryTable.COLUMN_ID+")"
 			+ ");";
+			
+	private static final String DATABASE_INSERT = " INSERT INTO " + TABLE_ACCOUNT + "("+COLUMN_NAME+","+COLUMN_ACCOUNT_CATEGORY_ID+")"
+			+ " VALUES(\"Other\",1) ;";
 	
 	public static void onCreate(SQLiteDatabase database) {
 		database.execSQL(DATABASE_CREATE);
+		database.execSQL(DATABASE_INSERT);
+		Log.i("AccountTable",DATABASE_INSERT);
 	}
 
 	public static void onUpgrade(SQLiteDatabase database, int oldVersion,

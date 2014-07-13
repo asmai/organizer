@@ -41,7 +41,7 @@ public class AccountView extends Model {
 	
 	public static void onUpgrade(SQLiteDatabase database, int oldVersion,
 			int newVersion) {
-		Log.w(AccountTable.class.getName(), "Upgrading database from version "
+		Log.w(AccountView.class.getName(), "Upgrading database from version "
 				+ oldVersion + " to " + newVersion
 				+ ", which will destroy all old data");
 		database.execSQL("DROP VIEW IF EXISTS " + VIEW_ACCOUNT);

@@ -9,6 +9,8 @@ import org.musalahuddin.myexpenseorganizer.camera.CameraModule;
 import org.musalahuddin.myexpenseorganizer.camera.CameraModule.CameraResultCallback;
 import org.musalahuddin.myexpenseorganizer.camera.CameraModule.ClearImageCallback;
 import org.musalahuddin.myexpenseorganizer.database.AccountTable;
+import org.musalahuddin.myexpenseorganizer.database.TransactionAccountTable;
+import org.musalahuddin.myexpenseorganizer.database.TransactionTable;
 
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -20,6 +22,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.app.LoaderManager;
 import android.content.Loader;
 import android.widget.SimpleCursorAdapter;
@@ -51,27 +54,30 @@ public class EditTransaction extends FragmentActivity implements OnClickListener
 	private static final int SELECT_EXPENSE_CATEGORY_REQUEST = 1;
 	private static final int SELECT_TRANSACTON_CATEGORY_REQUEST = 2;
 	
+	private long mTransactionId = 0L;
 	
 	static final int DIALOG_DATE = 0;
 	static final int DIALOG_TIME = 1;
-	
-	private long mTransactionDate = 0L;
-	private long mTransactionTime = 0L;
-	private Long mExpenseCatId = 0L;
-	private Long mTransactionCatId = 0L;
+
 	private Long mPrimaryAccountId = 0L;
 	private Long mSecondaryAccountId = 0L;
-	private String mTransactionCatName;
-	private String mExpenseCatName;
+	private Bitmap mTransactionImage = null;
+	private long mTransactionDate = 0L;
+	private long mTransactionTime = 0L;
+	private long mTransactionDateTime = 0L;
+	private Long mExpenseCatId = 0L;
+	private Long mTransactionCatId = 0L;
 	
-	
+
 	private Calendar mCalendar = Calendar.getInstance();
 	
-	private Bitmap pendingTransactionImage = null;
+	
 	
 	private Spinner mSpTransactionFrom, mSpTransactionTo;
 	private Spinner mSpTransactionFromAccount, mSpTransactionToAccount;
 	private EditText mEtTransactionFromOther, mEtTransactionToOther;
+	private EditText mEtTransactionAmount; 
+	private EditText mEtTransactionNotes;
 	private ImageButton mImgBtnTransactionCamera;
 	private Button mBtnTransactionDate,mBtnTransactionTime;
 	private Button mBtnTransactionCategory;
@@ -114,6 +120,8 @@ public class EditTransaction extends FragmentActivity implements OnClickListener
         mEtTransactionFromOther = (EditText) findViewById(R.id.in_transaction_from_other);
         mSpTransactionTo = (Spinner) findViewById(R.id.spinner_transaction_to);
         mSpTransactionToAccount = (Spinner) findViewById(R.id.in_transaction_to_account);
+        mEtTransactionAmount = (EditText) findViewById(R.id.in_transaction_amount);
+        mEtTransactionNotes = (EditText) findViewById(R.id.in_transaction_notes);
         mEtTransactionToOther = (EditText) findViewById(R.id.in_transaction_to_other);
         mImgBtnTransactionCamera = (ImageButton) findViewById(R.id.image_transaction_camera);
         mBtnTransactionDate = (Button) findViewById(R.id.in_transaction_date);
@@ -157,8 +165,16 @@ public class EditTransaction extends FragmentActivity implements OnClickListener
             //setTime();
         }
     	
+        setup();
 	}
 	
+	/**
+	 * set default values
+	 */
+	public void setup(){
+		setDate();
+		setTime();
+	}
 	
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
@@ -166,7 +182,7 @@ public class EditTransaction extends FragmentActivity implements OnClickListener
 		//outState.putSerializable("calendar", mCalendar);
 	}
 	
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -182,8 +198,11 @@ public class EditTransaction extends FragmentActivity implements OnClickListener
 		switch (item.getItemId()) {
 		
 		case R.id.SAVE_COMMAND:
-			Toast.makeText(EditTransaction.this,"exp: " + String.valueOf(mExpenseCatId) + "tran: " + String.valueOf(mTransactionCatId), Toast.LENGTH_LONG).show();
+			//Toast.makeText(EditTransaction.this,"exp: " + String.valueOf(mExpenseCatId) + "tran: " + String.valueOf(mTransactionCatId), Toast.LENGTH_LONG).show();
 			//finish();
+			if(saveState()){
+				save();
+			}
 			break;
 			
 		case R.id.CANCEL_COMMAND:
@@ -195,10 +214,111 @@ public class EditTransaction extends FragmentActivity implements OnClickListener
 		return false;
 	}
 	
+	/*
+	 * validate the form
+	 */
+	protected boolean saveState(){
+		
+		String transactionAmount = mEtTransactionAmount.getText().toString();
+		if(TextUtils.isEmpty(transactionAmount.trim())){
+			Toast.makeText(this, "Please enter amount", Toast.LENGTH_LONG).show();
+			return false;
+		}
+		
+		if(mTransactionDate == 0L){
+			Toast.makeText(this, "Please select date", Toast.LENGTH_LONG).show();
+			return false;
+		}
+		
+		if(mTransactionTime == 0L){
+			Toast.makeText(this, "Please select time", Toast.LENGTH_LONG).show();
+			return false;
+		}
+		
+		if(mExpenseCatId == 0L){
+			Toast.makeText(this, "Please select category", Toast.LENGTH_LONG).show();
+			return false;
+		}
+		
+		if(mTransactionCatId == 0L){
+			Toast.makeText(this, "Please select transaction type", Toast.LENGTH_LONG).show();
+			return false;
+		}
+		
+		return true;
+	}
+	
+	/*
+	 * save the data
+	 */
+	protected void save(){
+		//Toast.makeText(EditTransaction.this,String.valueOf(mPrimaryAccountId), Toast.LENGTH_LONG).show();
+		
+		long transactionId = 0L;
+		boolean success;
+		String transactionFromOther = mEtTransactionFromOther.getText().toString();
+		String transactionToOther = mEtTransactionToOther.getText().toString();
+		double transactionAmount = parseDouble(mEtTransactionAmount.getText().toString());
+		String transactionNotes = mEtTransactionNotes.getText().toString();
+		
+		if(mTransactionId != 0L){
+			success = true;//TransactionTabe.update(mAccountId, name, number, description, balance, limit, pay, due, catId) != -1;
+		}
+		else{
+			transactionId = TransactionTable.create(mTransactionCatId,mExpenseCatId,transactionNotes,transactionNotes,"",mTransactionDateTime);
+			success = transactionId != -1;
+			
+			if(!success){
+				Toast.makeText(this, "error", Toast.LENGTH_LONG).show();
+			}
+			else{
+				//withdraw
+				TransactionAccountTable.create(transactionId, mPrimaryAccountId, mSecondaryAccountId, transactionFromOther, transactionToOther, transactionAmount, 0);
+				//deposit
+				TransactionAccountTable.create(transactionId, mSecondaryAccountId, mPrimaryAccountId, transactionToOther, transactionFromOther, transactionAmount, 1);
+			}
+		}
+		
+		
+		
+		finish();
+		 
+	}
+	
+	protected double parseDouble(String str){
+		double number; 
+		try{
+			number =  Double.parseDouble(str);
+		}catch(NumberFormatException e){
+			number = 0; 
+		}
+		return number;
+	}
+	
+	protected int parseInt(String str){
+		int number; 
+		try{
+			number =  Integer.parseInt(str);
+		}catch(NumberFormatException e){
+			number = 0; 
+		}
+		return number;
+	}
+	
+	protected long parseLong(String str){
+		long number; 
+		try{
+			number =  Long.parseLong(str);
+		}catch(NumberFormatException e){
+			number = 0; 
+		}
+		return number;
+	}
+	
 	final ClearImageCallback clearImage = new ClearImageCallback() {
         @Override
         public void clearImage() {
-        	pendingTransactionImage = null;
+        	mTransactionImage = null;
         	mImgBtnTransactionCamera.setImageResource(cameraButton);
         }
     };
@@ -218,7 +338,7 @@ public class EditTransaction extends FragmentActivity implements OnClickListener
 			
 			Toast.makeText(EditTransaction.this,"getHeight = " + imageHeight, Toast.LENGTH_LONG).show();
 			
-			if (pendingTransactionImage != null)
+			if (mTransactionImage != null)
                 CameraModule.showPictureLauncher(this, clearImage);
             else
                 CameraModule.showPictureLauncher(this, null);
@@ -290,7 +410,7 @@ public class EditTransaction extends FragmentActivity implements OnClickListener
 	 * sets date on date button
 	 */
 	private void setDate() {
-		mTransactionDate = mCalendar.getTimeInMillis();
+		mTransactionDate = mTransactionDateTime = mCalendar.getTimeInMillis();
 		mBtnTransactionDate.setText(mDateFormat.format(mCalendar.getTime()));
 	}
 	
@@ -298,7 +418,7 @@ public class EditTransaction extends FragmentActivity implements OnClickListener
 	 * sets date on date button
 	 */
 	private void setTime() {
-		mTransactionTime = mCalendar.getTimeInMillis();
+		mTransactionTime = mTransactionDateTime = mCalendar.getTimeInMillis();
 		mBtnTransactionTime.setText(mTimeFormat.format(mCalendar.getTime()));
 	}
 	
@@ -344,37 +464,31 @@ public class EditTransaction extends FragmentActivity implements OnClickListener
 		if(requestCode == SELECT_EXPENSE_CATEGORY_REQUEST){
 			if (intent != null) {
 		      mExpenseCatId = intent.getLongExtra("exp_cat_id",0);
-		      mExpenseCatName = intent.getStringExtra("exp_cat_name");
-		      mBtnTransactionCategory.setText(mExpenseCatName);
-		      //Toast.makeText(EditTransaction.this,"hello " + mTransactionCatId, Toast.LENGTH_LONG).show();
-		
+		      mBtnTransactionCategory.setText(intent.getStringExtra("exp_cat_name"));
 		    }
 		}
 		else if(requestCode == SELECT_TRANSACTON_CATEGORY_REQUEST){
 			
 			if (intent != null) {
 		      mTransactionCatId = intent.getLongExtra("trans_cat_id",0);
-		      mTransactionCatName = intent.getStringExtra("trans_cat_name");
-		      mBtnTransactionType.setText(mTransactionCatName);
-		      //Toast.makeText(EditTransaction.this,"hello " + mTransactionCatId, Toast.LENGTH_LONG).show();
-		     
+		      mBtnTransactionType.setText(intent.getStringExtra("trans_cat_name"));
 		    }
 		}
 		else{
 			CameraResultCallback callback = new CameraResultCallback() {
 	            @Override
 	            public void handleCameraResult(Bitmap bitmap) {
-	            	Log.i("i am here","sir1");
+	            	Log.i("i am here","callback");
 	            	//Toast.makeText(EditTransaction.this,"getHeigth = " + mImgBtnTransactionCamera.getHeight(), Toast.LENGTH_LONG).show();
 	            	//Toast.makeText(EditTransaction.this,"getHeigth = " + EditTransaction.imageHeight, Toast.LENGTH_LONG).show();
 	            	
-	            	pendingTransactionImage = bitmap;
+	            	mTransactionImage = bitmap;
 	            
 	            	mImgBtnTransactionCamera.setMaxHeight(imageHeight);
 	                mImgBtnTransactionCamera.setMaxWidth(imageWidth);
 	                //mImgBtnTransactionCamera.setMaxHeight(150);
 	                //mImgBtnTransactionCamera.setMaxWidth(150);
-	            	mImgBtnTransactionCamera.setImageBitmap(pendingTransactionImage);
+	            	mImgBtnTransactionCamera.setImageBitmap(mTransactionImage);
 	               
 	                
 	            }
@@ -429,27 +543,35 @@ public class EditTransaction extends FragmentActivity implements OnClickListener
 		
 		case R.id.spinner_transaction_from:
 			if(position == 0){
+				mEtTransactionFromOther.setText("");
 				mEtTransactionFromOther.setVisibility(View.GONE);
 				mSpTransactionFromAccount.setVisibility(View.VISIBLE);
+				mSpTransactionFromAccount.setSelection(0);
+				mPrimaryAccountId = mSpTransactionFromAccount.getSelectedItemId(); // force to point to selected id
 			}
 			else{
 				mSpTransactionFromAccount.setVisibility(View.GONE);
 				mEtTransactionFromOther.setVisibility(View.VISIBLE);
-				mEtTransactionFromOther.setText("");
+				//mEtTransactionFromOther.setText("");
 				mEtTransactionFromOther.requestFocus();
+				mPrimaryAccountId = 1L; // default to "other" account
 			}
 			break;
 			
 		case R.id.spinner_transaction_to:
 			if(position == 0){
+				mEtTransactionToOther.setText("");
 				mEtTransactionToOther.setVisibility(View.GONE);
 				mSpTransactionToAccount.setVisibility(View.VISIBLE);
+				mSpTransactionToAccount.setSelection(0);
+				mSecondaryAccountId = mSpTransactionFromAccount.getSelectedItemId(); // force to point to selected id
 			}
 			else{
 				mSpTransactionToAccount.setVisibility(View.GONE);
 				mEtTransactionToOther.setVisibility(View.VISIBLE);
-				mEtTransactionToOther.setText("");
+				//mEtTransactionToOther.setText("");
 				mEtTransactionToOther.requestFocus();
+				mSecondaryAccountId = 1L; // default to "other" account
 			}
 			break;
 			

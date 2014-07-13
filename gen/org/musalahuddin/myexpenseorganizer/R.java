@@ -32,10 +32,10 @@ public final class R {
         public static final int squiggle=0x7f020005;
     }
     public static final class id {
-        public static final int CANCEL_COMMAND=0x7f0a003e;
-        public static final int CREATE_COMMAND=0x7f0a003b;
-        public static final int SAVE_COMMAND=0x7f0a003d;
-        public static final int SETTINGS_COMMAND=0x7f0a003c;
+        public static final int CANCEL_COMMAND=0x7f0a0044;
+        public static final int CREATE_COMMAND=0x7f0a0041;
+        public static final int SAVE_COMMAND=0x7f0a0043;
+        public static final int SETTINGS_COMMAND=0x7f0a0042;
         public static final int Table=0x7f0a000e;
         public static final int account_balance=0x7f0a0005;
         public static final int account_category=0x7f0a0007;
@@ -58,9 +58,9 @@ public final class R {
         public static final int in_transaction_amount=0x7f0a0028;
         public static final int in_transaction_category=0x7f0a0035;
         public static final int in_transaction_date=0x7f0a002f;
-        public static final int in_transaction_description=0x7f0a002c;
         public static final int in_transaction_from_account=0x7f0a001f;
         public static final int in_transaction_from_other=0x7f0a0020;
+        public static final int in_transaction_notes=0x7f0a002c;
         public static final int in_transaction_time=0x7f0a0032;
         public static final int in_transaction_to_account=0x7f0a0024;
         public static final int in_transaction_to_other=0x7f0a0025;
@@ -68,8 +68,8 @@ public final class R {
         public static final int label_transaction_amount=0x7f0a0027;
         public static final int label_transaction_category=0x7f0a0034;
         public static final int label_transaction_date=0x7f0a002e;
-        public static final int label_transaction_description=0x7f0a002a;
         public static final int label_transaction_from=0x7f0a001d;
+        public static final int label_transaction_notes=0x7f0a002a;
         public static final int label_transaction_time=0x7f0a0031;
         public static final int label_transaction_to=0x7f0a0022;
         public static final int label_transaction_type=0x7f0a0037;
@@ -85,16 +85,22 @@ public final class R {
         public static final int row_account_number=0x7f0a0010;
         public static final int row_account_payment=0x7f0a0008;
         public static final int row_add_field=0x7f0a001a;
+        public static final int row_transaction_account=0x7f0a003c;
         public static final int row_transaction_amount=0x7f0a0026;
         public static final int row_transaction_category=0x7f0a0033;
         public static final int row_transaction_date=0x7f0a002d;
-        public static final int row_transaction_description=0x7f0a0029;
         public static final int row_transaction_from=0x7f0a001c;
+        public static final int row_transaction_notes=0x7f0a0029;
         public static final int row_transaction_time=0x7f0a0030;
         public static final int row_transaction_to=0x7f0a0021;
         public static final int row_transaction_type=0x7f0a0036;
         public static final int spinner_transaction_from=0x7f0a001e;
         public static final int spinner_transaction_to=0x7f0a0023;
+        public static final int transaction_account=0x7f0a003d;
+        public static final int transaction_amount=0x7f0a003f;
+        public static final int transaction_category=0x7f0a003b;
+        public static final int transaction_date=0x7f0a0040;
+        public static final int transaction_type=0x7f0a003e;
     }
     public static final class layout {
         public static final int account_categories_list=0x7f030000;
@@ -108,7 +114,8 @@ public final class R {
         public static final int main=0x7f030008;
         public static final int select_category=0x7f030009;
         public static final int transaction_categories_list=0x7f03000a;
-        public static final int transactions_list=0x7f03000b;
+        public static final int transaction_row=0x7f03000b;
+        public static final int transactions_list=0x7f03000c;
     }
     public static final class menu {
         public static final int accounts=0x7f090000;
@@ -163,6 +170,7 @@ public final class R {
         public static final int menu_edit_account=0x7f070043;
         public static final int menu_edit_account_cat=0x7f070027;
         public static final int menu_edit_cat=0x7f070014;
+        public static final int menu_edit_transaction=0x7f070048;
         public static final int menu_edit_transaction_cat=0x7f070028;
         public static final int menu_settings=0x7f070003;
         public static final int no_categories=0x7f070007;

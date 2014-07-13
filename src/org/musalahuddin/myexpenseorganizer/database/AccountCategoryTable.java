@@ -34,9 +34,13 @@ public class AccountCategoryTable extends Model{
 				+ COLUMN_DELETE_DATE + " INTEGER, " 
 				+ COLUMN_DELETED + " INTERGER DEFAULT 0 NOT NULL"
 				+ ");";
+		
+		private static final String DATABASE_INSERT = " INSERT INTO " + TABLE_ACCOUNT_CATEGORY + "("+COLUMN_NAME+")"
+				+ " VALUES(\"Other Category\") ;";
 
 		public static void onCreate(SQLiteDatabase database) {
 			database.execSQL(DATABASE_CREATE);
+			database.execSQL(DATABASE_INSERT);
 		}
 
 		public static void onUpgrade(SQLiteDatabase database, int oldVersion,

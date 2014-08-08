@@ -19,6 +19,7 @@ public class TransactionView extends Model{
 	public static final String COLUMN_PRIMARY_ACCOUNT_ID = TransactionAccountTable.COLUMN_PRIMARY_ACCOUNT_ID;
 	public static final String COLUMN_SECONDARY_ACCOUNT_ID = TransactionAccountTable.COLUMN_SECONDARY_ACCOUNT_ID;
 	public static final String COLUMN_SECONDARY_ACCOUNT_NAME = "secondary_account_name";
+	public static final String COLUMN_PRIMARY_ACCOUNT_DESCRIPTION = TransactionAccountTable.COLUMN_PRIMARY_ACCOUNT_DESCRIPTION;
 	public static final String COLUMN_SECONDARY_ACCOUNT_DESCRIPTION = TransactionAccountTable.COLUMN_SECONDARY_ACCOUNT_DESCRIPTION;
 	public static final String COLUMN_AMOUNT = TransactionAccountTable.COLUMN_AMOUNT;
 	public static final String COLUMN_IS_DEPOSIT = TransactionAccountTable.COLUMN_IS_DEPOSIT;
@@ -38,6 +39,8 @@ public class TransactionView extends Model{
 				+ " AS "+COLUMN_ID+", "
 				+ TransactionAccountTable.TABLE_TRANSACTION_ACCOUNT +"."+TransactionAccountTable.COLUMN_PRIMARY_ACCOUNT_ID 
 				+ " AS "+COLUMN_PRIMARY_ACCOUNT_ID+", "
+				+ TransactionAccountTable.TABLE_TRANSACTION_ACCOUNT +"."+TransactionAccountTable.COLUMN_PRIMARY_ACCOUNT_DESCRIPTION 
+				+ " AS "+COLUMN_PRIMARY_ACCOUNT_DESCRIPTION+", "
 				+ TransactionAccountTable.TABLE_TRANSACTION_ACCOUNT +"."+TransactionAccountTable.COLUMN_SECONDARY_ACCOUNT_ID 
 				+ " AS "+COLUMN_SECONDARY_ACCOUNT_ID+", "
 				+ AccountTable.TABLE_ACCOUNT +"."+AccountTable.COLUMN_NAME 

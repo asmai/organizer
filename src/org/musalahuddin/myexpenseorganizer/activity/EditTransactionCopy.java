@@ -69,7 +69,7 @@ public class EditTransactionCopy extends FragmentActivity implements View.OnClic
 		
 		CameraResultCallback callback = new CameraResultCallback() {
             @Override
-            public void handleCameraResult(Bitmap bitmap) {
+            public void handleCameraResult(Bitmap bitmap, String imagePath) {
                 
             	
                 pendingCommentPicture = bitmap;

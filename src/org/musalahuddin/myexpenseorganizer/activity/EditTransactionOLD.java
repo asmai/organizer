@@ -443,7 +443,7 @@ public class EditTransactionOLD extends FragmentActivity implements OnClickListe
 		else{
 			CameraResultCallback callback = new CameraResultCallback() {
 	            @Override
-	            public void handleCameraResult(Bitmap bitmap) {
+	            public void handleCameraResult(Bitmap bitmap, String imagePath) {
 	            	//Toast.makeText(EditTransaction.this,"getHeigth = " + mImgBtnTransactionCamera.getHeight(), Toast.LENGTH_LONG).show();
 	            	//Toast.makeText(EditTransaction.this,"getHeigth = " + EditTransaction.imageHeight, Toast.LENGTH_LONG).show();
 	            	pendingTransactionImage = bitmap;

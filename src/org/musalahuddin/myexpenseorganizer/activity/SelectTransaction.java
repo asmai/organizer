@@ -10,6 +10,7 @@ import org.musalahuddin.myexpenseorganizer.database.AccountTable;
 import org.musalahuddin.myexpenseorganizer.database.TransactionAccountTable;
 import org.musalahuddin.myexpenseorganizer.database.TransactionCategoryTable;
 import org.musalahuddin.myexpenseorganizer.database.TransactionView;
+import org.musalahuddin.myexpenseorganizer.serializable.Transaction;
 
 import android.app.LoaderManager;
 import android.content.CursorLoader;
@@ -168,6 +169,7 @@ public class SelectTransaction extends FragmentActivity implements LoaderManager
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent i;
+		Bundle b;
 		switch (item.getItemId()) {
 		
 		case R.id.CREATE_COMMAND:
@@ -175,7 +177,10 @@ public class SelectTransaction extends FragmentActivity implements LoaderManager
 			i = new Intent(this, EditAccount.class);
 			startActivityForResult(i, 0);
 			*/
+			b = new Bundle();
+			b.putLong("primaryAccountId", mAccountId);
 			i = new Intent("myexpenseorganizer.intent.add.transactions");
+			i.putExtras(b);
 			startActivity(i);
 			 
 			break;
@@ -194,12 +199,17 @@ public class SelectTransaction extends FragmentActivity implements LoaderManager
 		selectionArgs = new String[]{String.valueOf(mAccountId)};
 		projection = new String[]{
 				TransactionView.COLUMN_ID, 
+				TransactionView.COLUMN_TRANSACTION_CATEGORY_ID,
 				TransactionView.COLUMN_TRANSACTION_CATEGORY_NAME,
+				TransactionView.COLUMN_PRIMARY_ACCOUNT_ID,
 				TransactionView.COLUMN_SECONDARY_ACCOUNT_ID,
 				TransactionView.COLUMN_SECONDARY_ACCOUNT_NAME,
+				TransactionView.COLUMN_PRIMARY_ACCOUNT_DESCRIPTION,
 				TransactionView.COLUMN_SECONDARY_ACCOUNT_DESCRIPTION,
 				TransactionView.COLUMN_AMOUNT,
 				TransactionView.COLUMN_IS_DEPOSIT,
+				TransactionView.COLUMN_NOTES,
+				TransactionView.COLUMN_EXPENSE_CATEGORY_ID,
 				TransactionView.COLUMN_EXPENSE_CATEGORY_PARENT_NAME,
 				TransactionView.COLUMN_EXPENSE_CATEGORY_CHILD_NAME,
 				TransactionView.COLUMN_TRANSACTION_DATE
@@ -224,6 +234,37 @@ public class SelectTransaction extends FragmentActivity implements LoaderManager
 	}
 	
 	public void editTransaction(Cursor c){
+		
+		Transaction transaction = new Transaction();
+		int isDeposit = c.getInt(c.getColumnIndex(TransactionView.COLUMN_IS_DEPOSIT));
+		
+		transaction.id = c.getLong(c.getColumnIndex(TransactionView.COLUMN_ID));
+		if(isDeposit == 0){
+			transaction.primaryAccountId = c.getLong(c.getColumnIndex(TransactionView.COLUMN_PRIMARY_ACCOUNT_ID));
+			transaction.secondaryAccountId = c.getLong(c.getColumnIndex(TransactionView.COLUMN_SECONDARY_ACCOUNT_ID));
+			transaction.secondaryAccountDescription = c.getString(c.getColumnIndex(TransactionView.COLUMN_SECONDARY_ACCOUNT_DESCRIPTION));
+		}
+		else{
+			transaction.primaryAccountId = c.getLong(c.getColumnIndex(TransactionView.COLUMN_SECONDARY_ACCOUNT_ID));
+			transaction.secondaryAccountId = c.getLong(c.getColumnIndex(TransactionView.COLUMN_PRIMARY_ACCOUNT_ID));
+			transaction.secondaryAccountDescription = c.getString(c.getColumnIndex(TransactionView.COLUMN_PRIMARY_ACCOUNT_DESCRIPTION));
+		}
+		transaction.amount = c.getDouble(c.getColumnIndex(TransactionView.COLUMN_AMOUNT));
+		transaction.isDeposit = c.getInt(c.getColumnIndex(TransactionView.COLUMN_IS_DEPOSIT));
+		transaction.date = c.getLong(c.getColumnIndex(TransactionView.COLUMN_TRANSACTION_DATE));
+		transaction.notes=c.getString(c.getColumnIndex(TransactionView.COLUMN_NOTES));
+		transaction.expenseCategoryId = c.getLong(c.getColumnIndex(TransactionView.COLUMN_EXPENSE_CATEGORY_ID));
+		transaction.expenseCategoryParentName = c.getString(c.getColumnIndex(TransactionView.COLUMN_EXPENSE_CATEGORY_PARENT_NAME));
+		transaction.expenseCategoryChildName = c.getString(c.getColumnIndex(TransactionView.COLUMN_EXPENSE_CATEGORY_CHILD_NAME));
+		transaction.transactionCategoryId = c.getLong(c.getColumnIndex(TransactionView.COLUMN_TRANSACTION_CATEGORY_ID));
+		transaction.transactionCategoryName = c.getString(c.getColumnIndex(TransactionView.COLUMN_TRANSACTION_CATEGORY_NAME));
+		
+		Bundle b = new Bundle();
+		b.putSerializable("mtransaction", transaction);
+		
+		Intent i = new Intent(this,EditTransaction.class);
+		i.putExtras(b);
+		startActivity(i);
 		
 	}
 

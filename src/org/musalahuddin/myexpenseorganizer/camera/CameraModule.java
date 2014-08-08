@@ -48,12 +48,13 @@ public class CameraModule extends FragmentActivity{
     }
     
     public interface CameraResultCallback {
-        public void handleCameraResult(Bitmap bitmap);
+        public void handleCameraResult(Bitmap bitmap, String imagePath);
     }
     
     static class MyAsyncTask extends AsyncTask<Uri, Void, Void> {
     	
     	Bitmap bitmap;
+    	String saveImagePath;
     	private Activity activity;
     	private CameraResultCallback camResult;
     	private int requestCode;
@@ -89,7 +90,11 @@ public class CameraModule extends FragmentActivity{
         		File file2 = getOutputMediaFile(MEDIA_TYPE_IMAGE);
         		String imagePath2 = file2.getAbsolutePath();
         		copyFile(imagePath,imagePath2);
+        		saveImagePath=imagePath2;
         	}
+			else{
+				saveImagePath=imagePath;
+			}
         	
         	bitmap = readScaledBitmap(imagePath);
             
@@ -103,7 +108,7 @@ public class CameraModule extends FragmentActivity{
 			super.onPostExecute(result);
 			if(bitmap != null) {
                 //activity.setResult(Activity.RESULT_OK);
-                camResult.handleCameraResult(bitmap);
+                camResult.handleCameraResult(bitmap,saveImagePath);
             }
 		}
 	

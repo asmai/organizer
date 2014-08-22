@@ -92,4 +92,27 @@ public class TransactionAccountTable extends Model{
 		return Integer.valueOf(uri.getLastPathSegment());
 		
 	}
+	
+	/**
+	 * Update TransactionAccount Table
+	 */
+	public static int update(
+			long transaction_id,
+			double amount)
+	{
+		amount = amount*100;
+		
+		ContentValues args = new ContentValues();
+		args.put(COLUMN_TRANSACTION_ID, transaction_id);
+		args.put(COLUMN_AMOUNT, amount);
+		
+		Uri uri;
+		try{
+			return cr().update(CONTENT_URI.buildUpon().appendPath(String.valueOf(transaction_id)).build(),
+			          args, null, null);
+		}
+		catch (SQLiteConstraintException e){
+			return -1;
+		}
+	}
 }

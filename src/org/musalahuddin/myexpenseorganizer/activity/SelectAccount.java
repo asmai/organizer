@@ -19,6 +19,8 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -27,6 +29,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.view.ViewGroup;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -36,6 +39,8 @@ public class SelectAccount extends FragmentActivity implements LoaderManager.Loa
 
 	private LoaderManager mManager;
 	private SimpleCursorAdapter mAdapter;
+	
+	EditText inputSearch;
 	
 	/**
      * edit the category label
@@ -61,6 +66,7 @@ public class SelectAccount extends FragmentActivity implements LoaderManager.Loa
 		//setTitle(R.string.account_overview_title);
 		setTitle(mManageOnly ? R.string.account_overview_title : R.string.select_account_category);
 		
+		inputSearch = (EditText) findViewById(R.id.inputSearch);
 		ListView lv = (ListView) findViewById(R.id.list);
 		
 		
@@ -173,6 +179,31 @@ public class SelectAccount extends FragmentActivity implements LoaderManager.Loa
 	    lv.setAdapter(mAdapter);
 	    lv.setOnItemClickListener(this);
 	    registerForContextMenu(lv);
+	    
+	    inputSearch.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				// TODO Auto-generated method stub
+				SelectAccount.this.mAdapter.getFilter().filter(s);
+				
+			}
+	    
+	    });
 	    
 	}
 	

@@ -493,6 +493,36 @@ public class MyExpenseOrganizerProvider extends ContentProvider{
 			getContext().getContentResolver().notifyChange(VIEW_ACCOUNTS_URI, null);
 			break;
 			
+		case TRANSACTIONS:
+			// bulk update should not be supported
+			count = db.update(TransactionTable.TABLE_TRANSACTION, values, selection, selectionArgs);
+			break;
+			
+		case TRANSACTIONS_ID:
+			
+			selection = TransactionTable.COLUMN_ID + " = " +  uri.getPathSegments().get(1);
+			selectionArgs = null;
+			count = db.update(TransactionTable.TABLE_TRANSACTION, values, selection, selectionArgs);
+			//notify the accounts view uri
+			getContext().getContentResolver().notifyChange(VIEW_TRANSACTIONS_URI, null);
+
+			break;
+			
+		case TRANSACTIONS_ACCOUNTS:
+			// bulk update should not be supported
+			count = db.update(TransactionAccountTable.TABLE_TRANSACTION_ACCOUNT, values, selection, selectionArgs);
+			break;
+			
+		case TRANSACTIONS_ACCOUNTS_ID:
+			
+			selection = TransactionAccountTable.COLUMN_TRANSACTION_ID + " = " +  uri.getPathSegments().get(1);
+			selectionArgs = null;
+			count = db.update(TransactionAccountTable.TABLE_TRANSACTION_ACCOUNT, values, selection, selectionArgs);
+			//notify the accounts view uri
+			getContext().getContentResolver().notifyChange(VIEW_TRANSACTIONS_URI, null);
+
+			break;
+			
 		default:
 				throw new IllegalArgumentException("Unknown URL " + uri);
 		}

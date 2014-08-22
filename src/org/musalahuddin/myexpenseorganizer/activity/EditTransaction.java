@@ -218,11 +218,19 @@ public class EditTransaction extends FragmentActivity implements OnClickListener
 			//Log.i("count: ",String.valueOf(c.getCount()));
 			DecimalFormat f = new DecimalFormat("0.00");
 			
+			mSpTransactionFrom.setEnabled(false);
+			mSpTransactionFromAccount.setEnabled(false);
+			
 			if(mSecondaryAccountId == 1L){
 				//Log.i("matching","secondaryId");
 				mSpTransactionTo.setSelection(1);
 				mEtTransactionToOther.setText(mSecondaryAccountDescription);
-				
+				mSpTransactionTo.setEnabled(false);
+				mEtTransactionToOther.setEnabled(false);
+			}
+			else{
+				mSpTransactionTo.setEnabled(false);
+				mSpTransactionToAccount.setEnabled(false);
 			}
 			
 			mEtTransactionAmount.setText(f.format(mTransactionAmount));
@@ -327,11 +335,12 @@ public class EditTransaction extends FragmentActivity implements OnClickListener
 		String transactionNotes = mEtTransactionNotes.getText().toString();
 		
 		if(mTransactionId != 0L){
-			success = true;//TransactionTabe.update(mAccountId, name, number, description, balance, limit, pay, due, catId) != -1;
-			Toast.makeText(this, mTransactionImagePath, Toast.LENGTH_LONG).show();
+			TransactionTable.update(mTransactionId,mTransactionCatId,mExpenseCatId,transactionNotes,transactionNotes,mTransactionImagePath,mTransactionDateTime);
+			//Toast.makeText(this, mTransactionImagePath, Toast.LENGTH_LONG).show();
+			TransactionAccountTable.update(mTransactionId, transactionAmount);
 		}
 		else{
-			transactionId = TransactionTable.create(mTransactionCatId,mExpenseCatId,transactionNotes,transactionNotes,"",mTransactionDateTime);
+			transactionId = TransactionTable.create(mTransactionCatId,mExpenseCatId,transactionNotes,transactionNotes,mTransactionImagePath,mTransactionDateTime);
 			success = transactionId != -1;
 			
 			if(!success){

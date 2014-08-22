@@ -92,4 +92,35 @@ public class TransactionTable extends Model{
 		return Integer.valueOf(uri.getLastPathSegment());
 		
 	}
+	
+	/**
+	 * update Transactions
+	 */
+	public static int update(
+			Long id,
+			long transaction_category_id,
+			long expense_category_id,
+			String description,
+			String notes,
+			String image_path,
+			long transaction_date){
+		
+		ContentValues args = new ContentValues();
+		args.put(COLUMN_TRANSACTION_CATEGORY_ID, transaction_category_id);
+		args.put(COLUMN_EXPENSE_CATEGORY_ID, expense_category_id);
+		args.put(COLUMN_DESCRIPTION, description);
+		args.put(COLUMN_NOTES, notes);
+		args.put(COLUMN_IMAGE_PATH, image_path);
+		args.put(COLUMN_TRANSACTION_DATE, transaction_date);
+		
+		Uri uri;
+		try{
+			return cr().update(CONTENT_URI.buildUpon().appendPath(String.valueOf(id)).build(),
+			          args, null, null);
+		}
+		catch (SQLiteConstraintException e){
+			return -1;
+		}
+		
+	}
 }

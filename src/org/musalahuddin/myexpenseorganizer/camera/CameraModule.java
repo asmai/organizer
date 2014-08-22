@@ -22,6 +22,8 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -90,10 +92,10 @@ public class CameraModule extends FragmentActivity{
         		File file2 = getOutputMediaFile(MEDIA_TYPE_IMAGE);
         		String imagePath2 = file2.getAbsolutePath();
         		copyFile(imagePath,imagePath2);
-        		saveImagePath=imagePath2;
+        		saveImagePath= new File(imagePath2).getName();
         	}
 			else{
-				saveImagePath=imagePath;
+				saveImagePath=new File(imagePath).getName();
 			}
         	
         	bitmap = readScaledBitmap(imagePath);
@@ -277,6 +279,38 @@ public class CameraModule extends FragmentActivity{
             }
             tries++;
         }
+        
+        // here it checks for the correct orientation
+        try {
+			ExifInterface exif = new ExifInterface(file);
+			int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
+			Log.i("orientation",String.valueOf(orientation));
+			
+			Matrix matrix = new Matrix();
+			boolean changeOrientation = false;
+            if (orientation == 6) {
+            	changeOrientation = true;
+                matrix.postRotate(90);
+            }
+            else if (orientation == 3) {
+            	changeOrientation = true;
+                matrix.postRotate(180);
+            }
+            else if (orientation == 8) {
+            	changeOrientation = true;
+                matrix.postRotate(270);
+            }
+			
+            if(changeOrientation == true){
+            	Log.i("orientation","changed");
+            	bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+            			bitmap.getHeight(), matrix, true);
+            }
+           
+        } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
         return bitmap;
     }
@@ -300,6 +334,8 @@ public class CameraModule extends FragmentActivity{
             return false;
         }
     }
+	
+	
 
 
 }

@@ -8,7 +8,7 @@ import android.util.Log;
 public class MyExpenseOrganizerDatabaseHelper extends SQLiteOpenHelper {
 
 	private static final String DATABASE_NAME = "myexpenseorganizer.db";
-	private static final int DATABASE_VERSION = 61;
+	private static final int DATABASE_VERSION = 62;
 	
 	public MyExpenseOrganizerDatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);

@@ -29,18 +29,21 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.view.ViewGroup;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.FilterQueryProvider;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.SimpleCursorAdapter.CursorToStringConverter;
 
 public class SelectAccount extends FragmentActivity implements LoaderManager.LoaderCallbacks<Cursor>,AdapterView.OnItemClickListener{
 
 	private LoaderManager mManager;
 	private SimpleCursorAdapter mAdapter;
 	
-	EditText inputSearch;
+	AutoCompleteTextView inputSearch;
 	
 	/**
      * edit the category label
@@ -66,7 +69,7 @@ public class SelectAccount extends FragmentActivity implements LoaderManager.Loa
 		//setTitle(R.string.account_overview_title);
 		setTitle(mManageOnly ? R.string.account_overview_title : R.string.select_account_category);
 		
-		inputSearch = (EditText) findViewById(R.id.inputSearch);
+		inputSearch = (AutoCompleteTextView) findViewById(R.id.inputSearch);
 		ListView lv = (ListView) findViewById(R.id.list);
 		
 		
@@ -173,38 +176,36 @@ public class SelectAccount extends FragmentActivity implements LoaderManager.Loa
 	            android.R.layout.simple_list_item_1, null, from, to,0);
 	    */
 	    
+	    
+	    
+	    
 	    mManager = getLoaderManager();
 	    
 	    mManager.initLoader(0, null, this);
+	    
 	    lv.setAdapter(mAdapter);
+	    //inputSearch.setAdapter(mAdapter);
+	    
+	    /*
+	    mAdapter.setFilterQueryProvider(new FilterQueryProvider() {
+	        public Cursor runQuery(CharSequence str) {
+	          return mAdapter.getCursor();
+	        } });
+	    
+	    mAdapter.setCursorToStringConverter(new CursorToStringConverter(){
+
+			@Override
+			public CharSequence convertToString(Cursor cursor) {
+				// TODO Auto-generated method stub
+				return cursor.getString(cursor.getColumnIndex(AccountTable.COLUMN_NAME));
+			}
+	    	
+	    });
+	    */
+	    
 	    lv.setOnItemClickListener(this);
 	    registerForContextMenu(lv);
-	    
-	    inputSearch.addTextChangedListener(new TextWatcher() {
-
-			@Override
-			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
-				// TODO Auto-generated method stub
-				SelectAccount.this.mAdapter.getFilter().filter(s);
-				
-			}
-	    
-	    });
-	    
+	      
 	}
 	
 	
